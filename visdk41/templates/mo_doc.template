@@ -1,0 +1,17 @@
+
+================================================================================
+{{ classname }}
+================================================================================
+
+{% for name, value in directives %}
+.. describe:: {{ name }}
+    {% if value is string %}
+    {{ value }}
+    {% elif value is sequence %}
+    {{ value|join(', ')|wordwrap(80, false)|indent(4) }}
+    {% endif %}
+
+{%- endfor %}
+.. 'autoclass':: pyvisdk.mo.{{ classname| uncamelcase }}.{{ classname }}
+    :members:
+    :inherited-members:

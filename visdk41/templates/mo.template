@@ -1,0 +1,49 @@
+
+from pyvisdk.base.managed_object_types import ManagedObjectTypes
+{% if base == "BaseEntity" %}
+from pyvisdk.base.{{ base |uncamelcase }} import {{ base }}
+{% else %}
+from pyvisdk.mo.{{ base |uncamelcase }} import {{ base }}
+{% endif %}
+import logging
+
+########################################
+# Automatically generated, do not edit.
+########################################
+
+log = logging.getLogger(__name__)
+
+class {{ classname }}({{ base }}):
+    '''{{ description|wordwrap|indent(4) }}'''
+    
+    def __init__(self, core, name=None, ref=None, type=ManagedObjectTypes.{{classname}}):
+        super({{classname}}, self).__init__(core, name=name, ref=ref, type=type)
+    
+    {% for prop in props %}
+    @property
+    def {{prop.name}}(self):
+        '''{{ prop.description|wordwrap|indent(8) }}'''
+        return self.update('{{prop.name}}')
+    {%- endfor %}
+    
+    {% for method in methods -%}
+    {% set count=method.arguments|length %}
+    {% if count > 0 %}
+    def {{method.name}}(self, {{ method.arguments|join(', ', attribute='name') }}):
+    {%- else %}
+    def {{method.name}}(self):
+    {%- endif %}
+        '''{{ method.description|wordwrap|indent(8) }}
+        {% for arg in method.arguments %}
+        :param {{arg.name}}: {{arg.description}}
+        {% endfor -%}
+        {% if method.return_value.type %}
+        :rtype: {{method.return_value.type}}
+        {% endif %}
+        '''
+        {%- if count > 0 %}
+        return self.delegate("{{method.name}}")({{ method.arguments|join(', ', attribute='name') }})
+        {%- else %}
+        return self.delegate("{{method.name}}")()
+        {%- endif %}
+    {%- endfor -%}

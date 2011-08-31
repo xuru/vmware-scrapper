@@ -1,0 +1,21 @@
+
+================================================================================
+{{ classname }}
+================================================================================
+
+{% for name, value in directives %}
+.. describe:: {{ name }}
+    {% if value is string %}
+    {{ value }}
+    {% elif value is sequence %}
+    {{ value|join(', ')|wordwrap(80, false)|indent(4) }}
+    {% endif %}
+
+{%- endfor %}
+.. class:: pyvisdk.do.{{ classname| uncamelcase }}.{{ classname }}
+    {% for property in properties %}
+    .. py:attribute:: {{ property.name }}
+    
+        {{property.description}}
+        
+    {% endfor %}
