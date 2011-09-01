@@ -366,7 +366,7 @@ class DataObject(Klass):
 class EnumObject(Klass):
     def __init__(self):
         super(EnumObject, self).__init__()
-        self.type = 'mo'
+        self.type = 'enum'
         self.item = None
         
     def parse(self, response):
