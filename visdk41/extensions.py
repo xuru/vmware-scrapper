@@ -111,21 +111,6 @@ class GenConsts(object):
                 fp.write('from {0} import {1}\n'.format( 'pyvisdk.do.' + camel_to_under(name), name))
             fp.write("\n\n")
             
-    def _generate_docs(self, docname, env, item):
-        #########################################
-        # generate documentation
-        #########################################
-        with open(docname, 'w') as fp:
-            if item['type'] == 'mo':
-                doc_template = env.get_template('mo_doc.template')
-                t = doc_template.render(classname=item['name'], directives=self._get_directives(item), methods=item['methods'])
-            elif item['type'] == 'do':
-                doc_template = env.get_template('do_doc.template')
-                t = doc_template.render(classname=item['name'], directives=self._get_directives(item), properties=item['properties'])
-            t = t.encode("ascii", "ignore")
-            fp.write(t)
-        return item
- 
     def _get_directives(self, item):
         directives = []
         for name, value in item['info'].items():
@@ -154,9 +139,11 @@ class GenConsts(object):
             with open(os.path.join(enums_dir, camel_to_under(item['name'])+".py"), 'w') as fp:
                 content = ""
                 for const in item['constants']:
-                    content += "    '%s',\n" % const['name']
+                    content += "    '%s',\n" % const.name
                 fp.write(enum_header % (item['name'], content.encode('ascii', 'replace')))
-            
+                        
+            self.pipeline.process_enum_item(item, self.enum_items)
+
 
     def item_scraped(self, item):
         if item['type'] == 'mo':

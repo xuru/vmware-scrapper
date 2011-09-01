@@ -121,6 +121,16 @@ class VisdkPipeline(object):
         self._generate_docs(docname, env, item)
         return item
     
+    def process_enum_item(self, item, items):
+        codename, docname = self._setup(item)
+        
+        env = Environment(loader=PackageLoader('visdk41', 'templates'))
+        env.filters['uncamelcase'] = camel_to_under
+        env.filters['quote'] = quote
+        
+        self._generate_docs(docname, env, item)
+        return item
+        
     def _get_props(self, item, items):
         props = []
         if item['info'].has_key('Extends'):
@@ -150,6 +160,9 @@ class VisdkPipeline(object):
             elif item['type'] == 'do':
                 doc_template = env.get_template('do_doc.template')
                 t = doc_template.render(classname=item['name'], directives=self._get_directives(item), properties=item['properties'])
+            elif item['type'] == 'enum':
+                doc_template = env.get_template('enum_doc.template')
+                t = doc_template.render(classname=item['name'], constants=item['constants'], description=item['description'])
             t = t.encode("ascii", "ignore")
             fp.write(t)
         return item
