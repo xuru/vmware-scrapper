@@ -4,10 +4,12 @@
 ==================================================================================================
 
 .. describe:: {{ classname }}
+
     {{ description }}
     
     {% for constant in constants %}
     .. py:data:: {{classname}}.{{ constant.name }}
+    
         {{ constant.description }}
         
     {% endfor %}
