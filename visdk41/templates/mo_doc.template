@@ -4,7 +4,7 @@
 ================================================================================
 
 {% for name, value in directives %}
-.. describe:: {{ name }}
+**{{name}}**
     {% if value is string %}
     {{ value }}
     {% elif value is sequence %}
