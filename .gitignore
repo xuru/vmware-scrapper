@@ -4,3 +4,4 @@
 /dump
 /develop-eggs
 /cache
+*.pyc
