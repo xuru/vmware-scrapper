@@ -5,3 +5,4 @@
 /develop-eggs
 /cache
 *.pyc
+/.installed.cfg
