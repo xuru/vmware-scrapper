@@ -6,3 +6,5 @@
 /cache
 *.pyc
 /.installed.cfg
+/downloads
+/.scrapy
