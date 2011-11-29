@@ -6,8 +6,7 @@
 import re
 from scrapy.item import Item, Field
 from scrapy.selector import HtmlXPathSelector
-
-footnote_re = re.compile(r"""(title="Need not be set")""",  re.IGNORECASE| re.DOTALL)
+from scrapy.selector.list import XPathSelectorList
 
 class ManagedItem(Item):
     name = Field()
@@ -47,7 +46,7 @@ def _clean(selector):
     elif isinstance(selector, unicode) or isinstance(selector, str):
         return selector.strip()
     else:
-        return selector.select('normalize-space()').extract()[0]
+        return selector.extract()
 
 class IteratorObject(object):
     def __init__(self):
@@ -136,7 +135,7 @@ class Arguments(IteratorObject):
     def parse(self, table):
         for row in table.select('.//tr')[1:]:
             optional=False
-            if footnote_re.search(str(row.xmlNode)):
+            if row.re(r"""(title="Need not be set")"""):
                 optional = True
             cols = []
             for col in row.select('./td/text()'):
@@ -178,44 +177,48 @@ class Methods(IteratorObject):
         super(Methods, self).__init__()
         
     def parse(self, hxs):
-        method_selectors = hxs.select("//h1/text()")[1:]
-        if len(method_selectors) < 1:
-            return self.data
+        method_selectors = hxs.select("//h1")
         
-        # gather up all method descriptions
-        for s in method_selectors:
-            name = _clean(s)
-            desc = ""
-            index = 0
-            nodes = s.select('following::node()')
-            while nodes[index].xmlNode.name in ['text', 'p']:
-                if nodes[index].xmlNode.name == 'p':
-                    x = _clean(nodes[index])
-                    if isinstance(x, list):
-                        x = ' '.join(x)
-                    desc += x
-                else:
-                    x = _clean(nodes[index].select('./text()'))
-                    if isinstance(x, list):
-                        x = ' '.join(x)
-                    desc += x
-                index += 1
-            
-            # the next three tables are for args, return and faults
-            args_table, return_table, faults_table = self._findParameters(s)
-            
-            args    = Arguments().parse(args_table)
-            rv      = ReturnValue().parse(return_table)
-            faults  = Faults().parse(faults_table)
-            
-            self.data.append( Method(name, desc, args, rv, faults) )
+        if isinstance(method_selectors, XPathSelectorList):
+            # gather up all method descriptions
+            for s in method_selectors:
+                name = _clean(s)
+                desc = ""
+                index = 0
+                nodes = s.select('following::node()')
+                for node in nodes:
+                    print node
+                    print type(node)
+                    ntype = node.select('name()')[0] 
+                    if not ntype in ['text', 'p']:
+                        break
+                    else:
+                        if ntype == 'p':
+                            x = _clean(nodes[index])
+                            if isinstance(x, list):
+                                x = ' '.join(x)
+                            desc += x
+                        else:
+                            x = _clean(nodes[index].select('./text()'))
+                            if isinstance(x, list):
+                                x = ' '.join(x)
+                            desc += x
+                    
+                # the next three tables are for args, return and faults
+                args_table, return_table, faults_table = self._findParameters(s)
+                
+                args    = Arguments().parse(args_table)
+                rv      = ReturnValue().parse(return_table)
+                faults  = Faults().parse(faults_table)
+                
+                self.data.append( Method(name, desc, args, rv, faults) )
         return self.data
     
     def _findParameters(self, selector):
         args_table = rv_table = faults_table = None
         paras = selector.select('following::p')
         for para in paras:
-            if 'Parameters' in para.xmlNode.content:
+            if para.re('Parameters'):
                 args_table = para.select('following::table[1]')[0]
             if 'Return Value' in _clean(para.select('./text()')):
                 rv_table = para.select('following::table[1]')[0]
@@ -247,7 +250,7 @@ class Properties(IteratorObject):
     def _parse_row(self, row):
         if len(row.select('./td')) > 2:
             optional = False
-            if footnote_re.search(str(row.xmlNode)):
+            if row.re(r"""(title="Need not be set")"""):
                 optional = True
             name = _clean(row.select("./td[1]/text()"))
             if isinstance(name, list):
@@ -267,7 +270,7 @@ class Properties(IteratorObject):
         props_table = None
         paras = selector.select('//p')
         for para in paras:
-            if 'Properties' in para.xmlNode.content:
+            if 'Properties' in para.extract():
                 props_table = para.select('following::table[1]')[0]
                 break
         return props_table
@@ -281,15 +284,19 @@ class Klass(object):
         self.referer = None
     
     def parse(self, response):
+        print "="*80
+        print response
+        print "="*80
         self.hxs = HtmlXPathSelector(response)
         self.referer = response.request.headers['Referer']
         
-        name_obj = re.search(r""".*\b.*?(?P<name>\w+)$""", _clean(self.hxs.select('/html/body/h1[1]/text()')))
-        try:
-            self.name = name_obj.group('name')
-        except AttributeError, e:
-            print str(e)
-            raise
+        text = _clean(self.hxs.select('/html/body/h1[1]/text()')).strip()
+        print "*" *80
+        print text
+        print "*" *80
+        name_obj = re.search(r""".*\b.*?(?P<name>\w+)$""", text)
+        print "name_obj: %s" % name_obj
+        self.name = name_obj.group('name')
         
         self.description = self._findDescription(self.hxs)
         
@@ -306,7 +313,7 @@ class Klass(object):
     def _findDescription(self, selector):
         h2s = selector.select('//h2')
         for h2 in h2s:
-            if " Description" in h2.xmlNode.content:
+            if " Description" in h2.extract():
                 break
         
         # now we have our h2...
@@ -409,7 +416,7 @@ class Enums(IteratorObject):
         enum_table = None
         paras = selector.select('//p')
         for para in paras:
-            if 'Enum Constants' in para.xmlNode.content:
+            if para.re('Enum Constants'):
                 enum_table = para.select('following::table[1]')[0]
                 break
         return enum_table
