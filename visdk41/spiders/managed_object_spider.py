@@ -3,8 +3,11 @@ from scrapy.spider import BaseSpider
 from scrapy.selector import HtmlXPathSelector
 from scrapy.http import Request
 
+import os.path
 from visdk41.items import ManagedObject
-from visdk41.settings import config
+from ConfigParser import ConfigParser
+config = ConfigParser()
+config.read( os.path.join(os.path.abspath(os.path.dirname(__file__)), '..','..',  'visdk41.cfg'))
 
 class MOSpider(BaseSpider):
     name = 'mo_spider'
@@ -16,7 +19,6 @@ class MOSpider(BaseSpider):
         
     def __del__(self):
         print self.verificationErrors
-        BaseSpider.__del__(self)
 
     def parse(self, response):
         hxs = HtmlXPathSelector(response)

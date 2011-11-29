@@ -9,7 +9,9 @@ from scrapy import signals
 from scrapy import log
 from scrapy.conf import settings
 from utils import camel_to_under
-from visdk41.settings import config
+from ConfigParser import ConfigParser
+config = ConfigParser()
+config.read( os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', 'visdk41.cfg'))
 from visdk41.pipelines import VisdkPipeline
 
 head = """

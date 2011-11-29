@@ -6,8 +6,9 @@ import os, keyword
 from jinja2 import Environment, PackageLoader
 from scrapy.conf import settings
 from utils import camel_to_under, quote
-from visdk41.settings import config
-
+from ConfigParser import ConfigParser
+config = ConfigParser()
+config.read( os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', 'visdk41.cfg'))
 
 class VisdkPipeline(object):
     mo_base = 'BaseEntity'
