@@ -5,10 +5,6 @@
 #
 #     http://doc.scrapy.org/topics/settings.html
 #
-import os, os.path
-CWD = os.path.abspath(os.path.dirname(__file__))
-CWD = os.path.normpath(os.path.join(CWD, '..'))
-
 BOT_NAME = 'visdk41'
 BOT_VERSION = '1.0'
 
@@ -28,7 +24,7 @@ LOG_LEVEL='WARNING'
 # --- Cache ---
 HTTPCACHE_ENABLED = True
 HTTPCACHE_EXPIRATION_SECS = 0
-HTTPCACHE_DIR = os.path.join(CWD, 'cache')
+HTTPCACHE_DIR = 'cache'
 
 # --- Extensions ---
 EXTENSIONS = {
@@ -59,15 +55,7 @@ DOWNLOAD_TIMEOUT = 20
 RANDOMIZE_DOWNLOAD_DELAY = True
 
 # --- app specific ---
-OUTPUT_DIR = os.path.expanduser('~/src/pyvisdk/pyvisdk')
-DOC_DIR = os.path.expanduser('~/src/pyvisdk/docs/source')
+OUTPUT_DIR = 'output'
+DOC_DIR = 'docs'
 
-DUMP_DIR = os.path.join(CWD, "dump")
-# make sure that our cache directory exists...
-if not os.path.exists(DUMP_DIR):
-    os.makedirs(DUMP_DIR, 755)
-    os.chmod(DUMP_DIR, 755)
-
-from ConfigParser import ConfigParser
-config = ConfigParser()
-config.read( os.path.join(CWD, 'visdk41.cfg'))
+DUMP_DIR = "dump"
