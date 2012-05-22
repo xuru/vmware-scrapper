@@ -4,8 +4,7 @@
   [vmware-scraper](http://xuru.github.com/vmware-scraper) is a scrapy project to scrape the [VMware vSphere web services API](http://www.vmware.com/support/developer/vc-sdk/) and generate code and sphinx documentation for pyvisdk.
 
 ## Installation
-  $ python bootstrap.py
-  $ ./bin/buildout
+  $ make build
   
   Then, just do a make:
   $ make data (for data objects), or make managed (for managed objects), etc...

@@ -5,15 +5,16 @@ all: build
 build:
 	$(PYTHON) ./bootstrap.py -d
 	./bin/buildout
+    mkdir -p output output/mo output/do output/enums output/base
 
 managed:
-	$(PYTHON) ./bin/scrapy_ctl.py crawl mo_spider
+	$(PYTHON) ./bin/scrapy crawl mo_spider
 
 data:
-	$(PYTHON) ./bin/scrapy_ctl.py crawl do_spider
+	$(PYTHON) ./bin/scrapy crawl do_spider
 
 enums:
-	$(PYTHON) ./bin/scrapy_ctl.py crawl enum_spider
+	$(PYTHON) ./bin/scrapy crawl enum_spider
 
 clean:
 	-find . \( -name '*.o' -o -name '*.so' -o -name '*.py[cod]' -o -name '*.dll' \) -exec rm -f {} \;
