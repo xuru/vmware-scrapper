@@ -44,9 +44,9 @@ def _clean(selector):
             return ''
         return rv
     elif isinstance(selector, unicode) or isinstance(selector, str):
-        return selector.strip()
+        return selector.strip().replace('<p>', '').replace('</p>', '').replace('<h1>', '').replace('</h1>', '').strip()
     else:
-        return selector.extract()
+        return _clean(selector.extract())
 
 class IteratorObject(object):
     def __init__(self):
@@ -183,13 +183,18 @@ class Methods(IteratorObject):
             # gather up all method descriptions
             for s in method_selectors:
                 name = _clean(s)
+                if ' ' in name:
+                    continue
                 desc = ""
                 index = 0
-                nodes = s.select('following::node()')
+                nodes = s.select('following::*')
                 for node in nodes:
                     print node
                     print type(node)
-                    ntype = node.select('name()')[0] 
+                    try:
+                        ntype = _clean(node.select('name()')[0])
+                    except:
+                        break
                     if not ntype in ['text', 'p']:
                         break
                     else:
@@ -203,7 +208,7 @@ class Methods(IteratorObject):
                             if isinstance(x, list):
                                 x = ' '.join(x)
                             desc += x
-                    
+
                 # the next three tables are for args, return and faults
                 args_table, return_table, faults_table = self._findParameters(s)
                 
