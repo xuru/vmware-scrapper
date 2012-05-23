@@ -143,7 +143,7 @@ class Arguments(IteratorObject):
                 if col:
                     cols.append(col)
             if len(cols) < 3:
-                continue
+                cols.append(' ')
             
             desc = ""
             if len(cols) > 3:
