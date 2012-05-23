@@ -15,9 +15,10 @@ config.read( os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', 'vis
 from visdk41.pipelines import VisdkPipeline
 
 head = """
-from pyvisdk.thirdparty import Enum
+from ..thirdparty import Enum
 
-ManagedObjectTypes = Enum(
+DataObjectTypes = Enum()
+DataObjectTypes.update( [
 """
 head_do = """
 from pyvisdk.thirdparty import Enum
