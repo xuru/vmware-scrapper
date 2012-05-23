@@ -144,9 +144,6 @@ class VisdkPipeline(object):
                 
         myprops = []
         for prop in item['properties']:
-            # beware of keywords...
-            if prop.name in keyword.kwlist + ['property']:
-                prop.name = prop.name + "_"
             myprops.append(prop)
         return myprops + props
        
