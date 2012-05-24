@@ -84,10 +84,7 @@ class GenConsts(object):
             self.pipeline.process_mo_item(item, self.mo_items)
             
         with open(os.path.join(codedir, '__init__.py'), 'w') as fp:
-            fp.write("\n\n")
-            for name in names:
-                fp.write('from {0} import {1}\n'.format( 'pyvisdk.mo.' + camel_to_under(name), name))
-            fp.write("\n\n")
+            fp.write("\n")
             
             
     def _write_do_types(self):
@@ -109,10 +106,7 @@ class GenConsts(object):
             self.pipeline.process_do_item(item, self.do_items)
             
         with open(os.path.join(codedir, '__init__.py'), 'w') as fp:
-            fp.write("\n\n")
-            for name in names:
-                fp.write('from {0} import {1}\n'.format( 'pyvisdk.do.' + camel_to_under(name), name))
-            fp.write("\n\n")
+            fp.write("\n")
             
     def _get_directives(self, item):
         directives = []
