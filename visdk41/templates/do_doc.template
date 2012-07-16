@@ -15,7 +15,7 @@
 .. class:: pyvisdk.do.{{ classname| uncamelcase }}.{{ classname }}
     {% for property in properties %}
     .. py:attribute:: {{ property.name }}
-    
+
         {{property.description}}
-        
+
     {% endfor %}

@@ -11,7 +11,7 @@ config.read( os.path.join(os.path.abspath(os.path.dirname(__file__)), '..','..',
 
 class DOSpider(BaseSpider):
     name = 'do_spider'
-    start_urls = [ "http://www.vmware.com/support/developer/vc-sdk/visdk41pubs/ApiReference/index-do_types.html" ]
+    start_urls = [ "http://vijava.sourceforge.net/vSphereAPIDoc/ver5/ReferenceGuide/index-do_types.html" ]
     
     def __init__(self):
         BaseSpider.__init__(self)
