@@ -1,0 +1,881 @@
+<html xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:vim2="urn:vim2" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+<script src="./commonRes.js" language="JavaScript"> type="text/javascript"></script>
+<link href="doc-style.css" type="text/css" rel="StyleSheet">
+</head>
+<script src="dynamic-content.js" type="text/javascript"></script>
+<body>
+<table cellspacing="0" class="header-footer" id="top">
+<tr>
+<td>
+<br>
+</td><td></td><td><a href="#field_detail">Local Properties</a></td><td><a href="#method_detail">Local Methods</a></td>
+</tr>
+<tr>
+<td><a href="index-mo_types.html">Managed Object Types</a></td><td><a href="index-do_types.html">Data Object Types</a></td><td><a href="index-properties.html">All Properties</a></td><td><a href="index-methods.html">All Methods</a></td>
+</tr>
+</table>
+<br>
+<a id="eam.Agency" name="eam.Agency"></a>
+<h1>Managed Object -  
+						Agency</h1>
+<dl>
+<dt>Property of</dt>
+<dd>
+<a href="eam.issue.AgencyIssue.html#field_detail">AgencyIssue</a>, <a href="eam.EsxAgentManager.html#field_detail">EsxAgentManager</a>
+</dd>
+<dt>Returned by</dt>
+<dd>
+<a href="eam.EsxAgentManager.html#createAgency">CreateAgency</a>, <a href="eam.EsxAgentManager.html#queryAgency">QueryAgency</a>
+</dd>
+<dt>Extends</dt>
+<dd>
+<a href="eam.EamObject.html">EamObject</a>
+</dd>
+<dt>See also</dt>
+<dd>
+<a href="eam.Agency.ConfigInfo.html">AgencyConfigInfo</a>, <a href="eam.Agent.html">Agent</a>, <a href="eam.EamObject.RuntimeInfo.html">EamObjectRuntimeInfo</a>
+</dd>
+<p></p>
+</dl>
+<br>
+<h2>Managed Object Description</h2>
+<p></p>
+         An <code>Agency</code> handles the deployment of a single type of agent virtual machine and any
+ associated VIB bundle, on a set of compute resources.
+ <p/>
+ For a solution to deploy multiple types of agents, it must create multiple
+ agencies by using <code>createAgency</code> on <a href="eam.EsxAgentManager.html">EsxAgentManager</a>
+ (see EsxAgentManager#createAgency(Agency.ConfigInfo,String)).
+ <p/>
+ Creating an agency is a long-running process. vSphere ESX Agent Manager must install VIBs,
+ configure
+ hosts, install agent virtual machines and do many more things. Each of these steps can take a
+ considerable amount of time. vSphere ESX Agent Manager can also encounter problems when
+ creating the agency. 
+ In this case, the solution must remediate the problem. See
+ Issue for a description of the kinds of issue that vSphere ESX Agent Manager will
+ raise. Similarly, removing an agency from vSphere ESX Agent Manager is also a long-running process that
+ involves many steps. Removing an agency can also raise issues.
+ <p/>
+ Use the <code>goalState</code> and <code>status</code> properties to show the progress of creating or removing an Agency. 
+ The <code>goalState</code> and <code>status</code> properties are found in the runtime information of an
+ <code>Agency</code> (see <a href="eam.EamObject.RuntimeInfo.html#status">status</a> in
+ Agency#runtime()):
+
+ <ul>
+   <li><code>goalState</code>. The goal state describes the overall goal of
+   an <code>Agency</code>. The goal state can be <code>enabled</code>, <code>disabled</code>, or <code>uninstalled</code>:
+   <ul>
+     <li><code>enabled</code>. The <code>Agency</code> 
+     continuously deploys VIBs and agent virtual machines, powers on agent virtual machines, and monitors agents for
+     issues.
+     </li>
+     <li><code>disabled</code>. Behavior is the same as for <code>enabled</code>, but the <code>Agency</code> does the not power
+     on agent virtual machines. If the <code>Agency</code> is assigned this goal state after being
+     enabled then any powered on agent virtual machines are powered off.
+     </li>
+     <li><code>uninstalled</code>. The <code>Agency</code> 
+     uninstalls any installed VIBs and powers off and deletes any deployed agent virtual machines.
+     </li>
+   </ul>
+   <li><code>status</code>. The status of the 
+   <code>Agency</code> regarding the given goal state. Status can be either red, yellow
+   or green:
+   <ul>
+    <li><code>red</code>. An issue is preventing the
+    <code>Agency</code> from reaching its
+    desired goal state. See <a href="eam.EamObject.RuntimeInfo.html#issue">issue</a> in Agency#runtime() for
+    the types of issues that can block this <code>Agency</code>.
+    <li><code>yellow</code>. The <code>Agency</code> is
+    actively working to reach
+    the desired goal state. For the <code>enabled</code> goal state, this means that this
+    <code>Agency</code> is currently installing VIBs, deploying agent virtual machines, and powering
+    them on.
+    <li><code>green</code>. The <code>Agency</code> has reached the desired goal state. 
+    The <code>Agency</code> is no longer actively scheduling new tasks but is monitoring the vCenter Server for
+    changes that might conflict with this <code>Agency</code>'s goal state.
+   </ul>
+   </li>
+ </ul>
+
+ The following image shows in general terms how the status changes in the
+ life-cycle of an <code>Agency</code>.<p/>
+
+ <img src="status-change-workflow.png" />
+ <p/>
+ "Agency degraded" means that
+ something has happened in the vCenter Server that causes this <code>Agency</code> to actively
+ schedule new tasks to reach the goal state. For example, adding a host to
+ a cluster covered by the scope of the <code>Agency</code>, which causes ESX Agent
+ Manager to install a VIB and deploy an agent virtual machine on the new host.
+
+ A solution should monitor the list of issues associated with this
+ <code>Agency</code>.
+ <p/>
+ The solution can poll Agency#runtime().
+      <a id="field_detail" name="field_detail"></a>
+<p class="table-title">Properties</p>
+<table cellspacing="0">
+<tr>
+<th>
+	          Name
+	        </th><th>
+	          Type
+	        </th><th>
+	          Description
+	        </th>
+</tr>
+<tr class="r1">
+<td nowrap="1"><a id="agent" name="agent"></a><strong>agent</strong><span title="May not be present" class="footnote-ref">*</span></td><td>vmodl.ManagedObjectReference
+<br> to a
+                  <a href="eam.Agent.html">Agent[]</a></td><td>
+<p></p>
+         An array of agents deployed by this agent manager.
+ <p/>
+ Requires view privileges.
+      <br>
+</td>
+</tr>
+<tr class="r0">
+<td nowrap="1"><a id="config" name="config"></a><strong>config</strong></td><td><a href="eam.Agency.ConfigInfo.html">AgencyConfigInfo</a></td><td>
+<p></p>
+         The configuration of this <code>Agency</code>. Specifies how this
+ <code>Agency</code> deploys its agents and VIBs.
+ <p/>
+ Requires view privileges.
+      <br>
+</td>
+</tr>
+<tr class="r1">
+<td nowrap="1"><a id="runtime" name="runtime"></a><strong>runtime</strong></td><td><a href="eam.EamObject.RuntimeInfo.html">EamObjectRuntimeInfo</a></td><td>
+<p></p>
+         Gets the runtime information for this agency.
+ <p/>
+ Requires view privileges.
+      <br>
+</td>
+</tr>
+<tr class="r0">
+<td nowrap="1"><a id="solutionId" name="solutionId"></a><strong>solutionId</strong></td><td>xsd:string</td><td>
+<p></p>
+         The ID of the solution that owns this <code>Agency</code>. If the agency
+ is owned by an extension, this is the extension's key. vCenter 5.0 only supports
+ solutions that are vCenter Extensions.
+ <p/>
+ Requires view privileges.
+      <br>
+</td>
+</tr>
+<tr class="r1">
+<td colspan="3">
+						Properties inherited from <a href="eam.EamObject.html">EamObject</a></td>
+</tr>
+<tr class="r0">
+<td colspan="3">None</td>
+</tr>
+</table>
+<span class="footnote-ref">*</span><span class="footnote">May not be present</span>
+<br>
+<a id="method_detail" name="method_detail"></a>
+<p class="table-title">Methods</p>
+<table cellspacing="0">
+<tr class="r1">
+<th>
+				          Methods defined in this Managed Object
+				        </th>
+</tr>
+<tr class="r0">
+<td><a href="#queryRuntime">AgencyQueryRuntime</a>, <a href="#destroyAgency">DestroyAgency</a>, <a href="#disable">Disable</a>, <a href="#enable">Enable</a>, <a href="#queryAgent">QueryAgent</a>, <a href="#queryConfig">QueryConfig</a>, <a href="#querySolutionId">QuerySolutionId</a>, <a href="#uninstall">Uninstall</a>, <a href="#update">Update</a></td>
+</tr>
+<tr class="r1">
+<td>
+            Methods inherited from <a href="eam.EamObject.html">EamObject</a></td>
+</tr>
+<tr class="r0">
+<td><a href="eam.EamObject.html#queryIssue">QueryIssue</a>, <a href="eam.EamObject.html#resolve">Resolve</a>, <a href="eam.EamObject.html#resolveAll">ResolveAll</a></td>
+</tr>
+</table>
+<br>
+<a id="queryRuntime" name="queryRuntime"></a>
+<h1>AgencyQueryRuntime</h1>
+<p></p>
+         Gets the runtime information for this agency.
+ <p/>
+ Requires view privileges.
+      <dl>
+<dt>Required Privileges</dt>
+<dd>None</dd>
+</dl>
+<p class="table-title">
+		Parameters
+		</p>
+<table cellspacing="0">
+<tr>
+<th>Name</th><th>Type</th><th>Description</th>
+</tr>
+<tr class="r1">
+<td><strong>_this</strong></td><td>vmodl.ManagedObjectReference</td><td>
+					A reference to the 
+						<a href="eam.Agency.html">Agency</a>
+						used to make the method call.
+					</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+		Return Value
+		</p>
+<table cellspacing="0">
+<tr>
+<th>
+	          Type
+	        </th><th>
+	          Description
+	        </th>
+</tr>
+<tr>
+<td><a href="eam.EamObject.RuntimeInfo.html">EamObjectRuntimeInfo</a></td><td>The runtime information.</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+         Faults
+      </p>
+<table cellspacing="0">
+<tr>
+<th>
+               Type
+            </th><th>
+               Description
+            </th>
+</tr>
+<tr class="r1">
+<td colspan="2">None</td>
+</tr>
+</table>
+<br>
+<a style="margin-bottom:10px; margin-top:10px; cursor:hand; cursor:pointer" onclick="resize_textarea('AgencyQueryRuntime-textarea');expandcontent(this, 'AgencyQueryRuntime-div')">Show WSDL type definition</a>
+<div class="switchcontent" id="AgencyQueryRuntime-div">
+<textarea cols="20" rows="10" name="AgencyQueryRuntime-textarea" wrap="off" readonly="1" id="AgencyQueryRuntime-textarea">         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="AgencyQueryRuntime" type="eam:AgencyQueryRuntimeRequestType"/>
+         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="AgencyQueryRuntimeResponse">
+            <complexType>
+               <sequence>
+                  <element name="returnval" type="eam:EamObjectRuntimeInfo"/>
+               </sequence>
+            </complexType>
+         </element></textarea>
+</div>
+<br>
+<br>
+<br>
+<a id="destroyAgency" name="destroyAgency"></a>
+<h1>DestroyAgency</h1>
+<p></p>
+         Destroys this Agency. Any agents that the <code>Agency</code> has are
+ removed. Until
+ the agents have been removed, it is possible to view the runtime state of this
+ <code>Agency</code> but it is not possible to modify its configuration or change its goal state.
+ After all
+ agents have been removed, any subsequent call on this <code>Agency</code> will
+ throw a <code>ManagedObjectNotFound</code> exception.
+ <p/>
+ Requires modify privileges.
+      <dl>
+<dt>Required Privileges</dt>
+<dd>None</dd>
+</dl>
+<p class="table-title">
+		Parameters
+		</p>
+<table cellspacing="0">
+<tr>
+<th>Name</th><th>Type</th><th>Description</th>
+</tr>
+<tr class="r1">
+<td><strong>_this</strong></td><td>vmodl.ManagedObjectReference</td><td>
+					A reference to the 
+						<a href="eam.Agency.html">Agency</a>
+						used to make the method call.
+					</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+		Return Value
+		</p>
+<table cellspacing="0">
+<tr>
+<th>
+	          Type
+	        </th><th>
+	          Description
+	        </th>
+</tr>
+<tr>
+<td colspan="2">None</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+         Faults
+      </p>
+<table cellspacing="0">
+<tr>
+<th>
+               Type
+            </th><th>
+               Description
+            </th>
+</tr>
+<tr class="r1">
+<td colspan="2">None</td>
+</tr>
+</table>
+<br>
+<a style="margin-bottom:10px; margin-top:10px; cursor:hand; cursor:pointer" onclick="resize_textarea('DestroyAgency-textarea');expandcontent(this, 'DestroyAgency-div')">Show WSDL type definition</a>
+<div class="switchcontent" id="DestroyAgency-div">
+<textarea cols="20" rows="10" name="DestroyAgency-textarea" wrap="off" readonly="1" id="DestroyAgency-textarea">         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="DestroyAgency" type="eam:DestroyAgencyRequestType"/>
+         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="DestroyAgencyResponse">
+            <complexType/>
+         </element></textarea>
+</div>
+<br>
+<br>
+<br>
+<a id="disable" name="disable"></a>
+<h1>Disable</h1>
+<p></p>
+         Sets the goal state of this <code>Agency</code> to <code>disabled</code>. This powers off
+ any powered on agent virtual machines, but continues provisioning agents to hosts that are added to the
+ compute resources in the agency's scope, and removes agents from hosts that are taken out
+ of the scope.
+ <p/>
+ Requires modify privileges.
+      <dl>
+<dt>Required Privileges</dt>
+<dd>None</dd>
+</dl>
+<p class="table-title">
+		Parameters
+		</p>
+<table cellspacing="0">
+<tr>
+<th>Name</th><th>Type</th><th>Description</th>
+</tr>
+<tr class="r1">
+<td><strong>_this</strong></td><td>vmodl.ManagedObjectReference</td><td>
+					A reference to the 
+						<a href="eam.Agency.html">Agency</a>
+						used to make the method call.
+					</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+		Return Value
+		</p>
+<table cellspacing="0">
+<tr>
+<th>
+	          Type
+	        </th><th>
+	          Description
+	        </th>
+</tr>
+<tr>
+<td colspan="2">None</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+         Faults
+      </p>
+<table cellspacing="0">
+<tr>
+<th>
+               Type
+            </th><th>
+               Description
+            </th>
+</tr>
+<tr class="r1">
+<td colspan="2">None</td>
+</tr>
+</table>
+<br>
+<a style="margin-bottom:10px; margin-top:10px; cursor:hand; cursor:pointer" onclick="resize_textarea('Disable-textarea');expandcontent(this, 'Disable-div')">Show WSDL type definition</a>
+<div class="switchcontent" id="Disable-div">
+<textarea cols="20" rows="10" name="Disable-textarea" wrap="off" readonly="1" id="Disable-textarea">         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="Disable" type="eam:DisableRequestType"/>
+         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="DisableResponse">
+            <complexType/>
+         </element></textarea>
+</div>
+<br>
+<br>
+<br>
+<a id="enable" name="enable"></a>
+<h1>Enable</h1>
+<p></p>
+         Sets the goal state of this <code>Agency</code> to <code>enabled</code>. This causes the
+ agency to continuously deploy and monitor agents.
+ <p/>
+ Requires modify privileges.
+      <dl>
+<dt>Required Privileges</dt>
+<dd>None</dd>
+</dl>
+<p class="table-title">
+		Parameters
+		</p>
+<table cellspacing="0">
+<tr>
+<th>Name</th><th>Type</th><th>Description</th>
+</tr>
+<tr class="r1">
+<td><strong>_this</strong></td><td>vmodl.ManagedObjectReference</td><td>
+					A reference to the 
+						<a href="eam.Agency.html">Agency</a>
+						used to make the method call.
+					</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+		Return Value
+		</p>
+<table cellspacing="0">
+<tr>
+<th>
+	          Type
+	        </th><th>
+	          Description
+	        </th>
+</tr>
+<tr>
+<td colspan="2">None</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+         Faults
+      </p>
+<table cellspacing="0">
+<tr>
+<th>
+               Type
+            </th><th>
+               Description
+            </th>
+</tr>
+<tr class="r1">
+<td colspan="2">None</td>
+</tr>
+</table>
+<br>
+<a style="margin-bottom:10px; margin-top:10px; cursor:hand; cursor:pointer" onclick="resize_textarea('Enable-textarea');expandcontent(this, 'Enable-div')">Show WSDL type definition</a>
+<div class="switchcontent" id="Enable-div">
+<textarea cols="20" rows="10" name="Enable-textarea" wrap="off" readonly="1" id="Enable-textarea">         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="Enable" type="eam:EnableRequestType"/>
+         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="EnableResponse">
+            <complexType/>
+         </element></textarea>
+</div>
+<br>
+<br>
+<br>
+<a id="queryAgent" name="queryAgent"></a>
+<h1>QueryAgent</h1>
+<p></p>
+         An array of agents deployed by this agent manager.
+ <p/>
+ Requires view privileges.
+      <dl>
+<dt>Required Privileges</dt>
+<dd>None</dd>
+</dl>
+<p class="table-title">
+		Parameters
+		</p>
+<table cellspacing="0">
+<tr>
+<th>Name</th><th>Type</th><th>Description</th>
+</tr>
+<tr class="r1">
+<td><strong>_this</strong></td><td>vmodl.ManagedObjectReference</td><td>
+					A reference to the 
+						<a href="eam.Agency.html">Agency</a>
+						used to make the method call.
+					</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+		Return Value
+		</p>
+<table cellspacing="0">
+<tr>
+<th>
+	          Type
+	        </th><th>
+	          Description
+	        </th>
+</tr>
+<tr>
+<td>vmodl.ManagedObjectReference
+<br> to a
+                  <a href="eam.Agent.html">Agent[]</a></td><td></td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+         Faults
+      </p>
+<table cellspacing="0">
+<tr>
+<th>
+               Type
+            </th><th>
+               Description
+            </th>
+</tr>
+<tr class="r1">
+<td colspan="2">None</td>
+</tr>
+</table>
+<br>
+<a style="margin-bottom:10px; margin-top:10px; cursor:hand; cursor:pointer" onclick="resize_textarea('QueryAgent-textarea');expandcontent(this, 'QueryAgent-div')">Show WSDL type definition</a>
+<div class="switchcontent" id="QueryAgent-div">
+<textarea cols="20" rows="10" name="QueryAgent-textarea" wrap="off" readonly="1" id="QueryAgent-textarea">         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="QueryAgent" type="eam:QueryAgentRequestType"/>
+         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="QueryAgentResponse">
+            <complexType>
+               <sequence>
+                  <element name="returnval" type="vim25:ManagedObjectReference" minOccurs="0" maxOccurs="unbounded"/>
+               </sequence>
+            </complexType>
+         </element></textarea>
+</div>
+<br>
+<br>
+<br>
+<a id="queryConfig" name="queryConfig"></a>
+<h1>QueryConfig</h1>
+<p></p>
+         The configuration of this <code>Agency</code>. Specifies how this
+ <code>Agency</code> deploys its agents and VIBs.
+ <p/>
+ Requires view privileges.
+      <dl>
+<dt>Required Privileges</dt>
+<dd>None</dd>
+</dl>
+<p class="table-title">
+		Parameters
+		</p>
+<table cellspacing="0">
+<tr>
+<th>Name</th><th>Type</th><th>Description</th>
+</tr>
+<tr class="r1">
+<td><strong>_this</strong></td><td>vmodl.ManagedObjectReference</td><td>
+					A reference to the 
+						<a href="eam.Agency.html">Agency</a>
+						used to make the method call.
+					</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+		Return Value
+		</p>
+<table cellspacing="0">
+<tr>
+<th>
+	          Type
+	        </th><th>
+	          Description
+	        </th>
+</tr>
+<tr>
+<td><a href="eam.Agency.ConfigInfo.html">AgencyConfigInfo</a></td><td>The configuration of this <code>Agency</code>.</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+         Faults
+      </p>
+<table cellspacing="0">
+<tr>
+<th>
+               Type
+            </th><th>
+               Description
+            </th>
+</tr>
+<tr class="r1">
+<td colspan="2">None</td>
+</tr>
+</table>
+<br>
+<a style="margin-bottom:10px; margin-top:10px; cursor:hand; cursor:pointer" onclick="resize_textarea('QueryConfig-textarea');expandcontent(this, 'QueryConfig-div')">Show WSDL type definition</a>
+<div class="switchcontent" id="QueryConfig-div">
+<textarea cols="20" rows="10" name="QueryConfig-textarea" wrap="off" readonly="1" id="QueryConfig-textarea">         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="QueryConfig" type="eam:QueryConfigRequestType"/>
+         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="QueryConfigResponse">
+            <complexType>
+               <sequence>
+                  <element name="returnval" type="eam:AgencyConfigInfo"/>
+               </sequence>
+            </complexType>
+         </element></textarea>
+</div>
+<br>
+<br>
+<br>
+<a id="querySolutionId" name="querySolutionId"></a>
+<h1>QuerySolutionId</h1>
+<p></p>
+         The ID of the solution that owns this <code>Agency</code>. If the agency
+ is owned by an extension, this is the extension's key. vCenter 5.0 only supports
+ solutions that are vCenter Extensions.
+ <p/>
+ Requires view privileges.
+      <dl>
+<dt>Required Privileges</dt>
+<dd>None</dd>
+</dl>
+<p class="table-title">
+		Parameters
+		</p>
+<table cellspacing="0">
+<tr>
+<th>Name</th><th>Type</th><th>Description</th>
+</tr>
+<tr class="r1">
+<td><strong>_this</strong></td><td>vmodl.ManagedObjectReference</td><td>
+					A reference to the 
+						<a href="eam.Agency.html">Agency</a>
+						used to make the method call.
+					</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+		Return Value
+		</p>
+<table cellspacing="0">
+<tr>
+<th>
+	          Type
+	        </th><th>
+	          Description
+	        </th>
+</tr>
+<tr>
+<td>xsd:string</td><td>The solution ID.</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+         Faults
+      </p>
+<table cellspacing="0">
+<tr>
+<th>
+               Type
+            </th><th>
+               Description
+            </th>
+</tr>
+<tr class="r1">
+<td colspan="2">None</td>
+</tr>
+</table>
+<br>
+<a style="margin-bottom:10px; margin-top:10px; cursor:hand; cursor:pointer" onclick="resize_textarea('QuerySolutionId-textarea');expandcontent(this, 'QuerySolutionId-div')">Show WSDL type definition</a>
+<div class="switchcontent" id="QuerySolutionId-div">
+<textarea cols="20" rows="10" name="QuerySolutionId-textarea" wrap="off" readonly="1" id="QuerySolutionId-textarea">         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="QuerySolutionId" type="eam:QuerySolutionIdRequestType"/>
+         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="QuerySolutionIdResponse">
+            <complexType>
+               <sequence>
+                  <element name="returnval" type="xsd:string"/>
+               </sequence>
+            </complexType>
+         </element></textarea>
+</div>
+<br>
+<br>
+<br>
+<a id="uninstall" name="uninstall"></a>
+<h1>Uninstall</h1>
+<p></p>
+         Sets the goal state of this <code>Agency</code> to <code>uninstalled</code>. This initiates the
+ uninstallation of this <code>Agency</code>, which causes all agents to be
+ removed.
+ <p/>
+ The best practice when destroying an agency is to call <code>uninstall</code>, wait for
+ the runtime status to turn green, and then invoke Agency#destroyAgency(). When
+ waiting for this <code>Agency</code> to be uninstalled the solution can then
+ attend to and resolve any raised issues.
+ <p/>
+ Requires modify privileges.
+      <dl>
+<dt>Required Privileges</dt>
+<dd>None</dd>
+</dl>
+<p class="table-title">
+		Parameters
+		</p>
+<table cellspacing="0">
+<tr>
+<th>Name</th><th>Type</th><th>Description</th>
+</tr>
+<tr class="r1">
+<td><strong>_this</strong></td><td>vmodl.ManagedObjectReference</td><td>
+					A reference to the 
+						<a href="eam.Agency.html">Agency</a>
+						used to make the method call.
+					</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+		Return Value
+		</p>
+<table cellspacing="0">
+<tr>
+<th>
+	          Type
+	        </th><th>
+	          Description
+	        </th>
+</tr>
+<tr>
+<td colspan="2">None</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+         Faults
+      </p>
+<table cellspacing="0">
+<tr>
+<th>
+               Type
+            </th><th>
+               Description
+            </th>
+</tr>
+<tr class="r1">
+<td colspan="2">None</td>
+</tr>
+</table>
+<br>
+<a style="margin-bottom:10px; margin-top:10px; cursor:hand; cursor:pointer" onclick="resize_textarea('Uninstall-textarea');expandcontent(this, 'Uninstall-div')">Show WSDL type definition</a>
+<div class="switchcontent" id="Uninstall-div">
+<textarea cols="20" rows="10" name="Uninstall-textarea" wrap="off" readonly="1" id="Uninstall-textarea">         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="Uninstall" type="eam:UninstallRequestType"/>
+         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="UninstallResponse">
+            <complexType/>
+         </element></textarea>
+</div>
+<br>
+<br>
+<br>
+<a id="update" name="update"></a>
+<h1>Update</h1>
+<p></p>
+         Updates the agency configuration used by this <code>Agency</code> to deploy agents
+ and VIBs. vSphere ESX Agent Manager generates a diff between the old configuration and the
+ new one and updates the <code>Agency</code> accordingly.
+ <p/>
+ Requires modify privileges.
+      <dl>
+<dt>Required Privileges</dt>
+<dd>None</dd>
+</dl>
+<p class="table-title">
+		Parameters
+		</p>
+<table cellspacing="0">
+<tr>
+<th>Name</th><th>Type</th><th>Description</th>
+</tr>
+<tr class="r1">
+<td><strong>_this</strong></td><td>vmodl.ManagedObjectReference</td><td>
+					A reference to the 
+						<a href="eam.Agency.html">Agency</a>
+						used to make the method call.
+					</td>
+</tr>
+<tr class="r0">
+<td nowrap="1"><strong>config</strong></td><td><a href="eam.Agency.ConfigInfo.html">AgencyConfigInfo</a></td><td>
+<p></p>
+         The new configuration for this <code>Agency</code>
+      <br>
+</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+		Return Value
+		</p>
+<table cellspacing="0">
+<tr>
+<th>
+	          Type
+	        </th><th>
+	          Description
+	        </th>
+</tr>
+<tr>
+<td colspan="2">None</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+         Faults
+      </p>
+<table cellspacing="0">
+<tr>
+<th>
+               Type
+            </th><th>
+               Description
+            </th>
+</tr>
+<tr class="r1">
+<td><a href="eam.fault.InvalidAgencyScope.html">InvalidAgencyScope</a></td><td>Thrown if one or more compute resources in the scope cannot be found in vCenter.</td>
+</tr>
+<tr class="r0">
+<td><a href="eam.fault.InvalidAgentConfiguration.html">InvalidAgentConfiguration</a></td><td>Thrown if one or more agent configurations are invalid.</td>
+</tr>
+<tr class="r1">
+<td><a href="eam.fault.InvalidUrl.html">InvalidUrl</a></td><td>Thrown if either the agent virtual machine URL or VIB URL cannot be parsed or if the resource refered to cannot be downloaded.</td>
+</tr>
+</table>
+<br>
+<a style="margin-bottom:10px; margin-top:10px; cursor:hand; cursor:pointer" onclick="resize_textarea('Update-textarea');expandcontent(this, 'Update-div')">Show WSDL type definition</a>
+<div class="switchcontent" id="Update-div">
+<textarea cols="20" rows="10" name="Update-textarea" wrap="off" readonly="1" id="Update-textarea">         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="Update" type="eam:UpdateRequestType"/>
+         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="UpdateResponse">
+            <complexType/>
+         </element></textarea>
+</div>
+<br>
+<br>
+<br>
+<br>
+<table cellspacing="0" class="header-footer" id="bottom">
+<tr>
+<td><a href="#top">Top of page</a></td><td></td><td><a href="#field_detail">Local Properties</a></td><td><a href="#method_detail">Local Methods</a></td>
+</tr>
+<tr>
+<td><a href="index-mo_types.html">Managed Object Types</a></td><td><a href="index-do_types.html">Data Object Types</a></td><td><a href="index-properties.html">All Properties</a></td><td><a href="index-methods.html">All Methods</a></td>
+</tr>
+</table>
+<br>
+<script language="javascript">document.write(ID_Copyright);</script>
+<br>
+<script language="javascript">document.write(ID_VersionInformation);</script>
+</body>
+</html>

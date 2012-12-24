@@ -13,22 +13,22 @@ config.read( os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', 'vis
 class VisdkPipeline(object):
     mo_base = 'BaseEntity'
     do_base = 'BaseData'
-    
+
     def _setup(self, item):
         # generate class code
         codedir = os.path.join(settings['OUTPUT_DIR'], config.get(item['type'], 'code_dir'))
         codename = codedir + '/%s.py' % camel_to_under(item['name'])
-        
+
         docdir = os.path.join(settings['DOC_DIR'], config.get(item['type'], 'doc_dir'))
         docname = docdir + '/%s.rst' % camel_to_under(item['name'])
-        
+
         if not os.path.exists(codedir):
             os.mkdir(codedir)
         if not os.path.exists(docdir):
             os.mkdir(docdir)
-        
+
         return codename, docname
-            
+
     def process_item(self, item, spider=None):
         #if item['type'] == 'mo':
         #    self.process_mo_item(item)
@@ -41,50 +41,49 @@ class VisdkPipeline(object):
     def process_mo_item(self, item, items):
         props = []
         codename, docname = self._setup(item)
-        
+
         env = Environment(loader=PackageLoader('visdk41', 'templates'))
         env.filters['uncamelcase'] = camel_to_under
         env.filters['quote'] = quote
-        
         for prop in item['properties']:
             # beware of keywords...
             if prop.name in keyword.kwlist + ['property']:
                 prop.name = prop.name + "_"
             props.append(prop)
-            
+
         _type = item['type']
         _base = item['info'].get('Extends', self.mo_base)
         if _base == self.mo_base:
             _type = 'base'
-            
+
         if item['name'] == 'PropertyFilter':
             pass
 
         with open(codename, 'w') as fp:
             template = env.get_template('mo.template')
             klass = template.render(
-                    classname=item['name'], 
-                    description=item['description'], 
+                    classname=item['name'],
+                    description=item['description'],
                     type=_type,
                     props=props,
                     methods=item['methods'],
-                    base=_base, 
+                    base=_base,
                 )
-                
+
             klass = klass.encode("ascii", "ignore")
             fp.write(klass)
-            
+
             self._generate_docs(docname, env, item)
         return item
-    
-       
+
+
     def process_do_item(self, item, items):
         codename, docname = self._setup(item)
-        
+
         env = Environment(loader=PackageLoader('visdk41', 'templates'))
         env.filters['uncamelcase'] = camel_to_under
         env.filters['quote'] = quote
-        
+
         _type = item['type']
         _base = item['info'].get('Extends', self.mo_base)
         if _base == self.mo_base:
@@ -92,9 +91,9 @@ class VisdkPipeline(object):
 
         if "VirtualEthernetCard" in item['name']:
             pass
-            
+
         with open(codename, 'w') as fp:
-                
+
             required = 0
             required_props = []
             optional_props = []
@@ -105,7 +104,7 @@ class VisdkPipeline(object):
                     required_props.append(prop)
                 else:
                     optional_props.append(prop)
-                    
+
             template = env.get_template('do.template')
             klass = template.render(
                     classname=item['name'],
@@ -114,39 +113,40 @@ class VisdkPipeline(object):
                     optional_props=[x.name for x in optional_props],
                     required_len=required,
                     type=_type,
-                    base=_base, 
+                    base=_base,
+                    namespace=item['namespace']
                 )
             klass = klass.encode("ascii", "ignore")
             fp.write(klass)
-            
+
         self._generate_docs(docname, env, item)
         return item
-    
+
     def process_enum_item(self, item, items):
         codename, docname = self._setup(item)
-        
+
         env = Environment(loader=PackageLoader('visdk41', 'templates'))
         env.filters['uncamelcase'] = camel_to_under
         env.filters['quote'] = quote
-        
+
         self._generate_docs(docname, env, item)
         return item
-        
+
     def _get_props(self, item, items):
         props = []
         if item['info'].has_key('Extends'):
             extends = item['info']['Extends']
-            
+
             # no multiple inheritence that I could see...
             parent = items.get(extends, None)
             if parent:
                 props += self._get_props(parent, items)
-                
+
         myprops = []
         for prop in item['properties']:
             myprops.append(prop)
         return myprops + props
-       
+
     def _generate_docs(self, docname, env, item):
         #########################################
         # generate documentation
@@ -164,24 +164,25 @@ class VisdkPipeline(object):
             t = t.encode("ascii", "ignore")
             fp.write(t)
         return item
- 
+
     def _get_directives(self, item):
         directives = []
         for name, value in item['info'].items():
             rvals = []
+            value = ''.join(value)
             values = [x.strip() for x in value.split(',')]
             for value in values:
                 if name in ['Returned by', 'Parameter to']:
                     rvals.append(":py:meth:`~pyvisdk.do.%s.%s`" % (camel_to_under(value), value))
-                    
+
                 elif name in ['Extends']:
                     rvals.append(":py:class:`~pyvisdk.mo.%s.%s`" % (camel_to_under(value), value))
-                    
+
                 elif name in ['See also', 'Property of', 'Extended by']:
                     rvals.append(":py:class:`~pyvisdk.do.%s.%s`" % (camel_to_under(value), value))
                 else:
                     rvals.append(value)
             directives.append( (name, rvals) )
         return directives
-                        
+
 

@@ -1,0 +1,51 @@
+<html>
+<body>
+<p></p>
+
+<table border="1" width="100%" cellpadding="3" cellspacing="0" summary="">
+<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+<th align="left" colspan="2"><font size="+2">
+<b>Description</b></font></th>
+</tr></table>
+
+<p>This Javadoc generated documentation set provides information about the sample applications included with the VMware vSphere Web Services SDK package. The samples include:</p>
+<ul>
+<li>Helper classes that provided client-application infrastructure (connect to server, handle command-line options, and so on)</li>
+<li>Samples</li>
+<li>Credential store administration utility and client API</li>
+</ul>
+<p>Documentation for all of these is included. This page contains:</p>
+<ul><li><a href="#howtorun" target="_self">Running the Samples</a></li>
+<li><a href="#topofpage" target="_self">Packages List</a></li>
+</ul>
+<p></p>
+<a name="howtorun"></a>
+<h2>Running the Samples</h2>
+
+
+<p></p>
+<p>All the samples use classes from the <code>apputils</code> package to authenticate the user running the application and create a connection to the server. Minimally, each application requires:</p>
+<ul>
+<li>URL to the server running the Web service, specified using the <span class="Code">--url</span> option</li>
+<li>User account that has privileges on the target server, specified using the <span class="Code">--userName</span> option</li>
+<li>Password for the userName, specified using the <span class="Code">--password</span> option. </li>
+</ul>
+
+<h3>Example</h3>
+
+<code><strong>java com.vmware.samples.packagename.SampleClassName --url https://myserver --userName username --password password --ignorecert</strong></code>
+
+<p>Here&#146;s the complete list of built-in command-line parameters (options) provided by the apputils classes:</p>
+<table cellpadding="3" cellspacing="0" border="1" width="650">
+
+<tr><td class="TableHead" width="110"><b>Parameter</b></td>
+<td class="TableHead" width="250"><b>Description</b></td>
+<td class="TableHead" width="250"><b>Example</b></td></tr>
+
+<tr><td class="TableText" vAlign="top">--url</td><td class="TableText" vAlign="top">Required. Complete URL for the vSphere API Web service for the connection.</td><td class="Code" vAlign="top">--url https://www.myserver.com/sdk</td></tr><tr><td class="TableText" vAlign="top">--userName</td><td class="TableText" vAlign="top">Required. User account with privileges to connect to the host. </td><td class="Code" vAlign="top">--userName root</td></tr><tr><td class="TableText" vAlign="top">--password</td><td class="TableText" vAlign="top">Required. Password for the user account.</td><td class="Code" vAlign="top">--password mypassword</td></tr><tr><td class="TableText" vAlign="top">--config</td><td class="TableText" vAlign="top"> Location of an optional configuration file that contains the required parameters.</td><td class="Code" vAlign="top">--config c:\myfilename</td></tr><tr><td class="TableText" vAlign="top">--protocol</td><td class="TableText" vAlign="top">Protocol for the server connection (HTTP, HTTPS; HTTPS is the default).</td><td class="Code" vAlign="top">--protocol http</td></tr><tr><td class="TableText" vAlign="top">--server</td><td class="TableText" vAlign="top">Fully-qualified name of the server to connect to, such as myserver.mycompany.com.</td><td class="Code" vAlign="top">--server myserver.mycompany.com</td></tr><tr><td class="TableText" vAlign="top">--portNumber</td><td class="TableText" vAlign="top">Server port for the vSphere API Web service. Default is 443 (for HTTPS).</td><td class="Code" vAlign="top">--portNumber 8080</td></tr><tr><td class="TableText" vAlign="top">--servicePath</td><td class="TableText" vAlign="top">Service path for the vSphere API, such as /sdk, /sdk/webService</td><td class="Code" vAlign="top">--servicePath sdk</td></tr><tr><td class="TableText" vAlign="top">--sessionFile</td><td class="TableText" vAlign="top">File containing a previously saved session cookie, for re-establishing connection to the server.</td><td class="Code" vAlign="top">--sessionFile c:\mysessionfile</td></tr><tr><td class="TableText" vAlign="top">--help</td><td class="TableText" vAlign="top">Display usage information for the application or script.</td><td class="Code" vAlign="top">--help</td></tr><tr><td class="TableText" vAlign="top">--ignorecert</td><td class="TableText" vAlign="top">Avoid the SSL server-certificate validation process. Using the <code>--ignorecert</code> option lets you by-pass importing server-certificates and creating a vmware.keystore (using the Java keytool utility).
+</td><td class="Code" vAlign="top">--ignorecert</td></tr></table>
+<p></p>
+
+</body>
+</html>
+

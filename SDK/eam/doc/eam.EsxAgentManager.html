@@ -1,0 +1,389 @@
+<html xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:vim2="urn:vim2" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+<script src="./commonRes.js" language="JavaScript"> type="text/javascript"></script>
+<link href="doc-style.css" type="text/css" rel="StyleSheet">
+</head>
+<script src="dynamic-content.js" type="text/javascript"></script>
+<body>
+<table cellspacing="0" class="header-footer" id="top">
+<tr>
+<td>
+<br>
+</td><td></td><td><a href="#field_detail">Local Properties</a></td><td><a href="#method_detail">Local Methods</a></td>
+</tr>
+<tr>
+<td><a href="index-mo_types.html">Managed Object Types</a></td><td><a href="index-do_types.html">Data Object Types</a></td><td><a href="index-properties.html">All Properties</a></td><td><a href="index-methods.html">All Methods</a></td>
+</tr>
+</table>
+<br>
+<a id="eam.EsxAgentManager" name="eam.EsxAgentManager"></a>
+<h1>Managed Object -  
+						EsxAgentManager</h1>
+<dl>
+<dt>Extends</dt>
+<dd>
+<a href="eam.EamObject.html">EamObject</a>
+</dd>
+<dt>See also</dt>
+<dd>
+<a href="eam.Agency.html">Agency</a>, <a href="eam.Agency.ConfigInfo.html">AgencyConfigInfo</a>, <a href="eam.issue.Issue.html">Issue</a>
+</dd>
+<p></p>
+</dl>
+<br>
+<h2>Managed Object Description</h2>
+<p></p>
+         The <code>EsxAgentManager</code> is the main entry point for a solution to create
+ agencies in the vSphere ESX Agent Manager server.
+ <p/>
+ In vCenter 5.0, a <i>solution</i> is always a vCenter extension.
+ <p/>
+ Although regular users and solutions can log in to the vSphere ESX Agent Manager server, only
+ solutions can create agencies.
+ <p/>
+ The vSphere ESX Agent Manager VMODL API distinguishes between two types of users: solutions
+ and regular vCenter users. These users have different privileges in the vSphere ESX Agent Manager
+ VMODL API:
+ <ul>
+    <li>Solutions have the privileges to call anything in the vSphere ESX Agent Manager
+    VMODL API.</li>
+    <li>Regular vCenter users have restrictions on what methods they can call.
+    The methods that a vCenter user that is not an extension can call 
+    are annotated with two types of privileges, <code>Eam.View</code> and <code>Eam.Modify</code>:
+    <ul>
+       <li><code>Eam.View</code>. If a method has the <code>Eam.View</code> privilege, a user can call that method
+       if they have the <code>EAM.View</code> privilege in vCenter.
+       </li>
+       <li><code>Eam.Modify</code>. Similarly to <code>Eam.View</code>, if a method has the <code>Eam.Modify</code> privilege, a user
+       can call that method if they have the <code>EAM.Modify</code> privilege in vCenter.
+       If a user has the <code>EAM.Modify</code> privilege, they automatically have <code>EAM.View</code>.
+       </li>
+    </ul>
+    </li>
+ </ul>
+      <a id="field_detail" name="field_detail"></a>
+<p class="table-title">Properties</p>
+<table cellspacing="0">
+<tr>
+<th>
+	          Name
+	        </th><th>
+	          Type
+	        </th><th>
+	          Description
+	        </th>
+</tr>
+<tr class="r1">
+<td nowrap="1"><a id="agency" name="agency"></a><strong>agency</strong><span title="May not be present" class="footnote-ref">*</span></td><td>vmodl.ManagedObjectReference
+<br> to a
+                  <a href="eam.Agency.html">Agency[]</a></td><td>
+<p></p>
+         An array of all <a href="eam.Agency.html">Agency</a> objects. If called by a vCenter user with the vCenter
+ <code>EAM.View</code> or <code>EAM.Modify</code> privilege, this returns all agencies registered in vSphere ESX Agent
+ Manager. If
+ called by a solution, this property only returns the agencies created by
+ the solution (and only those which have not been destroyed).
+ <p/>
+ Requires view privileges.
+      <br>
+</td>
+</tr>
+<tr class="r0">
+<td nowrap="1"><a id="issue" name="issue"></a><strong>issue</strong><span title="May not be present" class="footnote-ref">*</span></td><td><a href="eam.issue.Issue.html">Issue[]</a></td><td>
+<p></p>
+         Current issues that have been detected for this entity. Each issue can be remediated
+ by invoking EamObject#resolve(int[]) or EamObject#resolveAll().
+ <p/>
+ Requires view privileges.
+      <br>
+</td>
+</tr>
+<tr class="r1">
+<td colspan="3">
+						Properties inherited from <a href="eam.EamObject.html">EamObject</a></td>
+</tr>
+<tr class="r0">
+<td colspan="3">None</td>
+</tr>
+</table>
+<span class="footnote-ref">*</span><span class="footnote">May not be present</span>
+<br>
+<a id="method_detail" name="method_detail"></a>
+<p class="table-title">Methods</p>
+<table cellspacing="0">
+<tr class="r1">
+<th>
+				          Methods defined in this Managed Object
+				        </th>
+</tr>
+<tr class="r0">
+<td><a href="#createAgency">CreateAgency</a>, <a href="#queryAgency">QueryAgency</a>, <a href="#scanForUnknownAgentVm">ScanForUnknownAgentVm</a></td>
+</tr>
+<tr class="r1">
+<td>
+            Methods inherited from <a href="eam.EamObject.html">EamObject</a></td>
+</tr>
+<tr class="r0">
+<td><a href="eam.EamObject.html#queryIssue">QueryIssue</a>, <a href="eam.EamObject.html#resolve">Resolve</a>, <a href="eam.EamObject.html#resolveAll">ResolveAll</a></td>
+</tr>
+</table>
+<br>
+<a id="createAgency" name="createAgency"></a>
+<h1>CreateAgency</h1>
+<p></p>
+         Creates an Agency. The initial goal state is given to the
+ method by the second parameter. Throws <code>InvalidArgument</code> if the <code>agencyName</code> is not set in the <code>agencyConfigInfo</code>.
+      <dl>
+<dt>Required Privileges</dt>
+<dd>None</dd>
+</dl>
+<p class="table-title">
+		Parameters
+		</p>
+<table cellspacing="0">
+<tr>
+<th>Name</th><th>Type</th><th>Description</th>
+</tr>
+<tr class="r1">
+<td><strong>_this</strong></td><td>vmodl.ManagedObjectReference</td><td>
+					A reference to the 
+						<a href="eam.EsxAgentManager.html">EsxAgentManager</a>
+						used to make the method call.
+					</td>
+</tr>
+<tr class="r0">
+<td nowrap="1"><strong>agencyConfigInfo</strong></td><td><a href="eam.Agency.ConfigInfo.html">AgencyConfigInfo</a></td><td>
+<p></p>
+         The configuration that describes how to deploy the agents in the
+                         created agency.
+      <br>
+</td>
+</tr>
+<tr class="r1">
+<td nowrap="1"><strong>initialGoalState</strong></td><td>xsd:string</td><td>
+<p></p>
+         The initial goal state of the agency. See
+                         <a href="eam.EamObject.RuntimeInfo.GoalState.html">EamObjectRuntimeInfoGoalState</a>.
+      <br>
+</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+		Return Value
+		</p>
+<table cellspacing="0">
+<tr>
+<th>
+	          Type
+	        </th><th>
+	          Description
+	        </th>
+</tr>
+<tr>
+<td>vmodl.ManagedObjectReference
+<br> to a
+                  <a href="eam.Agency.html">Agency</a></td><td>The created agency.</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+         Faults
+      </p>
+<table cellspacing="0">
+<tr>
+<th>
+               Type
+            </th><th>
+               Description
+            </th>
+</tr>
+<tr class="r1">
+<td><a href="eam.fault.InvalidAgencyScope.html">InvalidAgencyScope</a></td><td>Thrown if one or more compute resources in the scope cannot be found in vCenter.</td>
+</tr>
+<tr class="r0">
+<td><a href="eam.fault.InvalidAgentConfiguration.html">InvalidAgentConfiguration</a></td><td>Thrown if the agent configuration is empty or if one or more agent configurations are invalid.</td>
+</tr>
+<tr class="r1">
+<td><a href="eam.fault.InvalidUrl.html">InvalidUrl</a></td><td>Thrown if either the agent virtual machine URL or VIB URL cannot be parsed or if the resource refered to cannot be downloaded.</td>
+</tr>
+</table>
+<br>
+<a style="margin-bottom:10px; margin-top:10px; cursor:hand; cursor:pointer" onclick="resize_textarea('CreateAgency-textarea');expandcontent(this, 'CreateAgency-div')">Show WSDL type definition</a>
+<div class="switchcontent" id="CreateAgency-div">
+<textarea cols="20" rows="10" name="CreateAgency-textarea" wrap="off" readonly="1" id="CreateAgency-textarea">         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="CreateAgency" type="eam:CreateAgencyRequestType"/>
+         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="CreateAgencyResponse">
+            <complexType>
+               <sequence>
+                  <element name="returnval" type="vim25:ManagedObjectReference"/>
+               </sequence>
+            </complexType>
+         </element></textarea>
+</div>
+<br>
+<br>
+<br>
+<a id="queryAgency" name="queryAgency"></a>
+<h1>QueryAgency</h1>
+<p></p>
+         An array of all <a href="eam.Agency.html">Agency</a> objects. If called by a vCenter user with the vCenter
+ <code>EAM.View</code> or <code>EAM.Modify</code> privilege, this returns all agencies registered in vSphere ESX Agent
+ Manager. If
+ called by a solution, this property only returns the agencies created by
+ the solution (and only those which have not been destroyed).
+ <p/>
+ Requires view privileges.
+      <dl>
+<dt>Required Privileges</dt>
+<dd>None</dd>
+</dl>
+<p class="table-title">
+		Parameters
+		</p>
+<table cellspacing="0">
+<tr>
+<th>Name</th><th>Type</th><th>Description</th>
+</tr>
+<tr class="r1">
+<td><strong>_this</strong></td><td>vmodl.ManagedObjectReference</td><td>
+					A reference to the 
+						<a href="eam.EsxAgentManager.html">EsxAgentManager</a>
+						used to make the method call.
+					</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+		Return Value
+		</p>
+<table cellspacing="0">
+<tr>
+<th>
+	          Type
+	        </th><th>
+	          Description
+	        </th>
+</tr>
+<tr>
+<td>vmodl.ManagedObjectReference
+<br> to a
+                  <a href="eam.Agency.html">Agency[]</a></td><td>The possibly empty set of agencies registered in the vSphere ESX Agent Manager server.</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+         Faults
+      </p>
+<table cellspacing="0">
+<tr>
+<th>
+               Type
+            </th><th>
+               Description
+            </th>
+</tr>
+<tr class="r1">
+<td colspan="2">None</td>
+</tr>
+</table>
+<br>
+<a style="margin-bottom:10px; margin-top:10px; cursor:hand; cursor:pointer" onclick="resize_textarea('QueryAgency-textarea');expandcontent(this, 'QueryAgency-div')">Show WSDL type definition</a>
+<div class="switchcontent" id="QueryAgency-div">
+<textarea cols="20" rows="10" name="QueryAgency-textarea" wrap="off" readonly="1" id="QueryAgency-textarea">         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="QueryAgency" type="eam:QueryAgencyRequestType"/>
+         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="QueryAgencyResponse">
+            <complexType>
+               <sequence>
+                  <element name="returnval" type="vim25:ManagedObjectReference" minOccurs="0" maxOccurs="unbounded"/>
+               </sequence>
+            </complexType>
+         </element></textarea>
+</div>
+<br>
+<br>
+<br>
+<a id="scanForUnknownAgentVm" name="scanForUnknownAgentVm"></a>
+<h1>ScanForUnknownAgentVm</h1>
+<p></p>
+         Scans the vCenter inventory for any unknown agent virtual machine. An issue is generated for
+ each unknown agent virtual machine found during this scan.
+ <p/>
+ Requires view privileges.
+      <dl>
+<dt>Required Privileges</dt>
+<dd>None</dd>
+</dl>
+<p class="table-title">
+		Parameters
+		</p>
+<table cellspacing="0">
+<tr>
+<th>Name</th><th>Type</th><th>Description</th>
+</tr>
+<tr class="r1">
+<td><strong>_this</strong></td><td>vmodl.ManagedObjectReference</td><td>
+					A reference to the 
+						<a href="eam.EsxAgentManager.html">EsxAgentManager</a>
+						used to make the method call.
+					</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+		Return Value
+		</p>
+<table cellspacing="0">
+<tr>
+<th>
+	          Type
+	        </th><th>
+	          Description
+	        </th>
+</tr>
+<tr>
+<td colspan="2">None</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+         Faults
+      </p>
+<table cellspacing="0">
+<tr>
+<th>
+               Type
+            </th><th>
+               Description
+            </th>
+</tr>
+<tr class="r1">
+<td colspan="2">None</td>
+</tr>
+</table>
+<br>
+<a style="margin-bottom:10px; margin-top:10px; cursor:hand; cursor:pointer" onclick="resize_textarea('ScanForUnknownAgentVm-textarea');expandcontent(this, 'ScanForUnknownAgentVm-div')">Show WSDL type definition</a>
+<div class="switchcontent" id="ScanForUnknownAgentVm-div">
+<textarea cols="20" rows="10" name="ScanForUnknownAgentVm-textarea" wrap="off" readonly="1" id="ScanForUnknownAgentVm-textarea">         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="ScanForUnknownAgentVm" type="eam:ScanForUnknownAgentVmRequestType"/>
+         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="ScanForUnknownAgentVmResponse">
+            <complexType/>
+         </element></textarea>
+</div>
+<br>
+<br>
+<br>
+<br>
+<table cellspacing="0" class="header-footer" id="bottom">
+<tr>
+<td><a href="#top">Top of page</a></td><td></td><td><a href="#field_detail">Local Properties</a></td><td><a href="#method_detail">Local Methods</a></td>
+</tr>
+<tr>
+<td><a href="index-mo_types.html">Managed Object Types</a></td><td><a href="index-do_types.html">Data Object Types</a></td><td><a href="index-properties.html">All Properties</a></td><td><a href="index-methods.html">All Methods</a></td>
+</tr>
+</table>
+<br>
+<script language="javascript">document.write(ID_Copyright);</script>
+<br>
+<script language="javascript">document.write(ID_VersionInformation);</script>
+</body>
+</html>

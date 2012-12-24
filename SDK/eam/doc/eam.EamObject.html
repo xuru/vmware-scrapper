@@ -1,0 +1,330 @@
+<html xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:vim2="urn:vim2" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+<script src="./commonRes.js" language="JavaScript"> type="text/javascript"></script>
+<link href="doc-style.css" type="text/css" rel="StyleSheet">
+</head>
+<script src="dynamic-content.js" type="text/javascript"></script>
+<body>
+<table cellspacing="0" class="header-footer" id="top">
+<tr>
+<td>
+<br>
+</td><td></td><td></td><td><a href="#method_detail">Local Methods</a></td>
+</tr>
+<tr>
+<td><a href="index-mo_types.html">Managed Object Types</a></td><td><a href="index-do_types.html">Data Object Types</a></td><td><a href="index-properties.html">All Properties</a></td><td><a href="index-methods.html">All Methods</a></td>
+</tr>
+</table>
+<br>
+<a id="eam.EamObject" name="eam.EamObject"></a>
+<h1>Managed Object -  
+						EamObject</h1>
+<dl>
+<dt>Property of</dt>
+<dd>
+<a href="eam.EamObject.RuntimeInfo.html#field_detail">EamObjectRuntimeInfo</a>
+</dd>
+<dt>Extended by</dt>
+<dd>
+<a href="eam.Agency.html">Agency</a>, <a href="eam.Agent.html">Agent</a>, <a href="eam.EsxAgentManager.html">EsxAgentManager</a>
+</dd>
+<dt>See also</dt>
+<dd>
+<a href="eam.issue.Issue.html">Issue</a>
+</dd>
+<p></p>
+</dl>
+<br>
+<h2>Managed Object Description</h2>
+<p></p>
+         Base class for the <code>Agent</code>, <code>Agency</code> and
+ <code>EsxAgentManager</code> classes.
+      <a id="field_detail" name="field_detail"></a>
+<p class="table-title">Properties</p>
+<table cellspacing="0">
+<tr>
+<th>
+	          Name
+	        </th><th>
+	          Type
+	        </th><th>
+	          Description
+	        </th>
+</tr>
+<tr class="r0">
+<td colspan="3">None</td>
+</tr>
+</table>
+<br>
+<a id="method_detail" name="method_detail"></a>
+<p class="table-title">Methods</p>
+<table cellspacing="0">
+<tr class="r1">
+<th>
+				          Methods defined in this Managed Object
+				        </th>
+</tr>
+<tr class="r0">
+<td><a href="#queryIssue">QueryIssue</a>, <a href="#resolve">Resolve</a>, <a href="#resolveAll">ResolveAll</a></td>
+</tr>
+</table>
+<br>
+<a id="queryIssue" name="queryIssue"></a>
+<h1>QueryIssue</h1>
+<p></p>
+         Current issues that have been detected for this entity. Each issue can be remediated
+ by invoking EamObject#resolve(int[]) or EamObject#resolveAll().
+ <p/>
+ Requires view privileges.
+      <dl>
+<dt>Required Privileges</dt>
+<dd>None</dd>
+</dl>
+<p class="table-title">
+		Parameters
+		</p>
+<table cellspacing="0">
+<tr>
+<th>Name</th><th>Type</th><th>Description</th>
+</tr>
+<tr class="r1">
+<td><strong>_this</strong></td><td>vmodl.ManagedObjectReference</td><td>
+					A reference to the 
+						<a href="eam.EamObject.html">EamObject</a>
+						used to make the method call.
+					</td>
+</tr>
+<tr class="r0">
+<td nowrap="1"><strong>issueKey</strong><span title="Need not be set" class="footnote-ref">*</span></td><td>xsd:int[]</td><td>
+<p></p>
+         An optional array of issue keys. If not set, all issues for this
+                 entity are returned.
+      <br>
+</td>
+</tr>
+</table>
+<span class="footnote-ref">*</span><span class="footnote">Need not be set </span>
+<br>
+<p class="table-title">
+		Return Value
+		</p>
+<table cellspacing="0">
+<tr>
+<th>
+	          Type
+	        </th><th>
+	          Description
+	        </th>
+</tr>
+<tr>
+<td><a href="eam.issue.Issue.html">Issue[]</a></td><td>A possibly empty array of issues that match the input <code>issueKey</code> array. Note that the returned array can be smaller than <code>issueKey</code> if one or more issue keys refers to issues that this entity does not have.</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+         Faults
+      </p>
+<table cellspacing="0">
+<tr>
+<th>
+               Type
+            </th><th>
+               Description
+            </th>
+</tr>
+<tr class="r1">
+<td colspan="2">None</td>
+</tr>
+</table>
+<br>
+<a style="margin-bottom:10px; margin-top:10px; cursor:hand; cursor:pointer" onclick="resize_textarea('QueryIssue-textarea');expandcontent(this, 'QueryIssue-div')">Show WSDL type definition</a>
+<div class="switchcontent" id="QueryIssue-div">
+<textarea cols="20" rows="10" name="QueryIssue-textarea" wrap="off" readonly="1" id="QueryIssue-textarea">         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="QueryIssue" type="eam:QueryIssueRequestType"/>
+         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="QueryIssueResponse">
+            <complexType>
+               <sequence>
+                  <element name="returnval" type="eam:Issue" minOccurs="0" maxOccurs="unbounded"/>
+               </sequence>
+            </complexType>
+         </element></textarea>
+</div>
+<br>
+<br>
+<br>
+<a id="resolve" name="resolve"></a>
+<h1>Resolve</h1>
+<p></p>
+         Resolves the issues specified in the input. If an issue is remediable, ESX
+ Agent Manager
+ tries to resolve the misconfiguration that caused the issue. If it is not
+ remediable, the offending issue is removed and ESX Agent Manager assumes that the issue has been
+ resolved.
+ <p/>
+ Requires modify privileges.<br>See Issue
+      <dl>
+<dt>Required Privileges</dt>
+<dd>None</dd>
+</dl>
+<p class="table-title">
+		Parameters
+		</p>
+<table cellspacing="0">
+<tr>
+<th>Name</th><th>Type</th><th>Description</th>
+</tr>
+<tr class="r1">
+<td><strong>_this</strong></td><td>vmodl.ManagedObjectReference</td><td>
+					A reference to the 
+						<a href="eam.EamObject.html">EamObject</a>
+						used to make the method call.
+					</td>
+</tr>
+<tr class="r0">
+<td nowrap="1"><strong>issueKey</strong></td><td>xsd:int[]</td><td>
+<p></p>
+         A non-empty array of issue keys.<br>See Issue
+      <br>
+</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+		Return Value
+		</p>
+<table cellspacing="0">
+<tr>
+<th>
+	          Type
+	        </th><th>
+	          Description
+	        </th>
+</tr>
+<tr>
+<td>xsd:int[]</td><td>A possibly empty array of issue keys for the issues that were not found on the entity. This can happen if <code>resolve</code> is called with issue keys that were resolved just prior to calling <code>resolve</code>.</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+         Faults
+      </p>
+<table cellspacing="0">
+<tr>
+<th>
+               Type
+            </th><th>
+               Description
+            </th>
+</tr>
+<tr class="r1">
+<td colspan="2">None</td>
+</tr>
+</table>
+<br>
+<a style="margin-bottom:10px; margin-top:10px; cursor:hand; cursor:pointer" onclick="resize_textarea('Resolve-textarea');expandcontent(this, 'Resolve-div')">Show WSDL type definition</a>
+<div class="switchcontent" id="Resolve-div">
+<textarea cols="20" rows="10" name="Resolve-textarea" wrap="off" readonly="1" id="Resolve-textarea">         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="Resolve" type="eam:ResolveRequestType"/>
+         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="ResolveResponse">
+            <complexType>
+               <sequence>
+                  <element name="returnval" type="xsd:int" minOccurs="0" maxOccurs="unbounded"/>
+               </sequence>
+            </complexType>
+         </element></textarea>
+</div>
+<br>
+<br>
+<br>
+<a id="resolveAll" name="resolveAll"></a>
+<h1>ResolveAll</h1>
+<p></p>
+         Resolve all outstanding issues. The method calls EamObject#resolve(int[])
+ with all issues the <code>EsxAgentManager</code>, <code>Agency</code>, or
+ <code>Agent</code> have encountered. It is the equivalent of calling the following methods:
+ <ul>
+ <li><code>agent.resolve(getIssueKeys(agent.getRuntime().getIssue()));</code> 
+ for <code>Agent</code> objects</li>
+ <li><code>agency.resolve(getIssueKeys(agency.getRuntime().getIssue()));</code> 
+ for <code>Agency</code> objects</li>
+ <li><code>esxAgentManager.resolve(getIssueKeys(esxAgentManager.getIssue()));</code>
+ for the <code>EsxAgentManager</code> object.</li>
+ </ul>
+ Requires modify privileges.<br>See Issue
+      <dl>
+<dt>Required Privileges</dt>
+<dd>None</dd>
+</dl>
+<p class="table-title">
+		Parameters
+		</p>
+<table cellspacing="0">
+<tr>
+<th>Name</th><th>Type</th><th>Description</th>
+</tr>
+<tr class="r1">
+<td><strong>_this</strong></td><td>vmodl.ManagedObjectReference</td><td>
+					A reference to the 
+						<a href="eam.EamObject.html">EamObject</a>
+						used to make the method call.
+					</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+		Return Value
+		</p>
+<table cellspacing="0">
+<tr>
+<th>
+	          Type
+	        </th><th>
+	          Description
+	        </th>
+</tr>
+<tr>
+<td colspan="2">None</td>
+</tr>
+</table>
+<br>
+<p class="table-title">
+         Faults
+      </p>
+<table cellspacing="0">
+<tr>
+<th>
+               Type
+            </th><th>
+               Description
+            </th>
+</tr>
+<tr class="r1">
+<td colspan="2">None</td>
+</tr>
+</table>
+<br>
+<a style="margin-bottom:10px; margin-top:10px; cursor:hand; cursor:pointer" onclick="resize_textarea('ResolveAll-textarea');expandcontent(this, 'ResolveAll-div')">Show WSDL type definition</a>
+<div class="switchcontent" id="ResolveAll-div">
+<textarea cols="20" rows="10" name="ResolveAll-textarea" wrap="off" readonly="1" id="ResolveAll-textarea">         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="ResolveAll" type="eam:ResolveAllRequestType"/>
+         <element xmlns="http://www.w3.org/2001/XMLSchema" xmlns:eam="urn:eam" xmlns:vim25="urn:vim25" xmlns:reflect="urn:reflect" name="ResolveAllResponse">
+            <complexType/>
+         </element></textarea>
+</div>
+<br>
+<br>
+<br>
+<br>
+<table cellspacing="0" class="header-footer" id="bottom">
+<tr>
+<td><a href="#top">Top of page</a></td><td></td><td></td><td><a href="#method_detail">Local Methods</a></td>
+</tr>
+<tr>
+<td><a href="index-mo_types.html">Managed Object Types</a></td><td><a href="index-do_types.html">Data Object Types</a></td><td><a href="index-properties.html">All Properties</a></td><td><a href="index-methods.html">All Methods</a></td>
+</tr>
+</table>
+<br>
+<script language="javascript">document.write(ID_Copyright);</script>
+<br>
+<script language="javascript">document.write(ID_VersionInformation);</script>
+</body>
+</html>
