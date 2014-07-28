@@ -13,15 +13,15 @@ class LintMiddleware(object):
     '''
     Middleware to lint the html before processing
     '''
-    link_re = re.compile(r"""<a href="vim.*?>(.*?)</a>""",  re.MULTILINE| re.DOTALL)
+    link_re = re.compile(r"""<a href="(?:vim|sms).*?>(.*?)</a>""",  re.MULTILINE| re.DOTALL)
     vmodl_re = re.compile(r"""<a href="vmodl.*?>(.*?)</a>""",  re.MULTILINE| re.DOTALL)
     anchor_re = re.compile(r"""<a href="#.*?>(.*?)</a>""",  re.MULTILINE| re.DOTALL)
     strong_re = re.compile(r"""<strong>(.*?)</strong>""",  re.MULTILINE| re.DOTALL)
     script_re = re.compile(r"""<script.*?>.*?</.*?script>""",  re.MULTILINE| re.DOTALL)
-    
+
     table_re = re.compile(r"""<table>(?P<outer>.*?<table.*?>.*?</table>.*?)</table>""",  re.MULTILINE| re.DOTALL)
     inner_table_re = re.compile(r"""(?P<inner><table>.*?</table>)""",  re.MULTILINE| re.DOTALL)
-    
+
     empty_anchor_re = re.compile(r"""<a.*?></.*?a>""")
     ul_re = re.compile(r"""<ul>""")
     ul_end_re = re.compile(r"""<[/]ul>""")
@@ -39,7 +39,7 @@ class LintMiddleware(object):
             return response
 
         body = response.body
-        
+
         # VERY UGLY...  need to get this done, so it's ugly for now...
         index = body.find("<table")
         while index != -1:
@@ -49,24 +49,24 @@ class LintMiddleware(object):
                 # we have an inner table...
                 if body.find("<tr", inner, endtable) != -1:
                     break  # if it's truely a table
-                    
+
                 else:
                     start = inner-1
                     end = body.find(">", inner)+1
                     body = body[:start] + body[end:]
-                    
+
                     endtable = body.find("</table", index+6)
-                    
+
                     start = endtable-1
                     end = body.find(">", endtable)+1
                     body = body[:start] + body[end:]
-                    
+
             index = body.find("<table", index+6)
-            
+
         # remove any <br> before we tidy it up
         body = self.br_re.sub('', body)
         body = self.empty_anchor_re.sub('', body)
-        
+
         tidylib.BASE_OPTIONS = {
             "output-xhtml": 0,     # XHTML instead of HTML4
             "indent": 1,           # Pretty; not too much of a performance hit
@@ -78,7 +78,7 @@ class LintMiddleware(object):
         }
         body, _ = tidy_document(body, options={'drop-empty-paras':1,
                     'drop-font-tags':1,'enclose-text':1,'merge-divs':1,'fix-bad-comments':1})
-            
+
         body = self.link_re.sub('\g<1>', body)
         body = self.vmodl_re.sub('\g<1>', body)
         body = self.strong_re.sub('\g<1>', body)
@@ -87,7 +87,7 @@ class LintMiddleware(object):
         body = self.li_end_re.sub('', body)
         body = self.li_re.sub('* ', body)
         body = self.ul_end_re.sub('', body)
-        
+
         response = response.replace(body=body)
         return response
-    
+

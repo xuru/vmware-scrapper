@@ -1,0 +1,304 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/tr/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<title>VMware vCenter Storage Monitoring Service API Readme</title>
+<meta content="VMware, Inc. All rights reserved." name="copyright"></meta>
+<link rel="stylesheet" type="text/css" href="docresources/template.css"></link>
+
+<style type="text/css">
+.Code
+    {
+	font-size: 11px; font-family: 
+	"Courier New", Courier, monospace; 
+	}
+	
+.Console
+    {
+	font-size: 11px; font-family: 
+	"Courier New", Courier, monospace; 
+	color: #ffffff;
+	font-weight: bold;
+	background: #000000;
+	}
+.Caption {
+	font-size:11px; line-height:12px; text-transform: uppercase; FONT-WEIGHT: bold; COLOR: #000000; TEXT-DECORATION: none
+}
+.Exp {
+	font-size:11px; text-transform: uppercase; FONT-WEIGHT: bold; COLOR: #3366AA;
+}
+.Large { font-size: 16px; FONT-WEIGHT: bold; }
+
+.Light-shade {
+background-color: #ffffcc;
+}
+.Caps {
+	font-size:11px; text-transform: uppercase; COLOR: #000000; TEXT-DECORATION: none
+}
+
+.Parameter {
+	margin: 0 0 7px 0;
+	width: 100%;
+	font-size: 11px;
+	font-weight: bold;
+}
+
+.TableText {
+	FONT-SIZE: 11px;
+}
+
+
+.TableHead {
+	FONT-SIZE: 10px; font-weight: bold;
+}
+
+.BoldRedText {
+	FONT-WEIGHT: bold; COLOR: #CC0000; TEXT-DECORATION: none
+}
+.BoldBlue {
+	FONT-WEIGHT: bold; COLOR: #3366AA; TEXT-DECORATION: none
+}
+.Miniscule {font-size: 9px;
+           }
+
+.Nav {font-size: 11px; COLOR: #3366AA;
+           }
+h2 {font-weight:bold;}
+h4 {
+	padding: 0;
+	font-size: 12px;
+	font-weight: bold;
+	border-top: 1px solid #dedede;
+	background-color:#E6EDF6;
+}
+
+</style>
+</head>
+<body>
+	
+<table cellpadding="0" cellspacing="5" id="main-table" align="left">
+<tr><td id="main-body" align="left">
+<!-- ///*** start of content area ***/// -->
+<img src="docresources/vmware.gif" alt="VMware logo" width="187" height="72" border="0"></img>
+<h1>VMware vCenter Storage Monitoring Service API Readme</h1>
+
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr><td vAlign="top" class="Nav">
+
+<img src="docresources/page.gif" alt="VMware SMS API Reference Documentation" width="13" height="16" border="0"></img> &nbsp;<a href="docs/ReferenceGuide/index.html" title="Go to the SMS API Reference documentation..." target="_blank">VMware SMS API Reference Documentation</a></br>
+<img src="docresources/page.gif" alt="Samples Reference Documentation" width="13" height="16" border="0"></img> &nbsp;<a href="docs/java/JAXWS/samples/javadoc/index.html" title="Go to the documentation for the Java samples...." target="_blank">VMware SMS API Java Samples Documentation</a>
+</td><td vAlign="bottom" align="right" class="Caps"></td></tr></table>
+
+
+<hr/>
+<table cellpadding="10" cellspacing="0" width="100%">
+<tr><td width="400" vAlign="top" class="light-blue-shade">
+
+<p>Welcome to the <strong>VMware vCenter Storage Monitoring Service API</strong>. 
+This Readme contains these topics:</p>
+  	
+	 <ul><li><a href="#aboutsms">About VMware vCenter Storage Monitoring Service</a></li>
+	  <li><a href="#aboutsmsapi" target="_top">About VMware vCenter Storage Monitoring Service API</a></li>
+	 <li><a href="#contents" target="_top">Package Contents</a></li>
+	 <li> <a href="#requirements" target="_top">Requirements</a></li>
+	  <li><a href="#samples" target="_top">Samples Listing</a></li>
+	   <li><a href="#pubs" target="_top">Documentation</a>
+	    <ul>
+	  <li><a href="docs/ReferenceGuide/index.html" title="VMware SMS API Reference documentation...">VMware SMS API Reference Documentation</a></li>
+	  <li><a href="docs/java/JAXWS/samples/javadoc/index.html" title="Readme includes samples listings..." target="_blank">VMware SMS API Java Samples Documentation</a></li>
+	  </ul>
+	  </li>
+	   </li>
+	  <li><a href="#checklist" target="_top">Checklist of Setup Tasks for Development</a></li>
+	  <li><a href="#resources" target="_top">VMware Resources</a></li>
+	 </ul>
+	 
+
+
+
+
+</td><td vAlign="top" align="right" width="300">
+
+<!--caveat about state of document -->
+<table cellpadding="5" cellspacing="0" width="300" border="0">
+<tr><td colspan="2" align="left">For up-to-date information:</td></tr>
+<tr><td colspan="2" align="left"><table cellpadding="5" cellspacing="0" width="100%" border="1" class="light-blue-shade">
+<tr><td vAlign="top" colspan="2" align="left"></td></tr>
+<tr class="Caps"><td vAlign="top" width="45%" class="Caption" align="left">Beta or Pre-release Products</td>
+
+<td vAlign="top"><a href="http://communities.vmware.com/community/beta">VMware Beta Community</a></td></tr>
+
+<tr class="Caps"><td class="Caption">Released SDK Products</td><td vAlign="top"><a href="http://www.vmware.com/support/pubs/sdk_pubs.html">VMware APIs and SDKs Documentation</a>
+</td></tr></table>
+
+ </div>
+</td></tr></table>
+<!--conclude caveat about state of links -->
+
+</td></tr></table>
+	
+
+<a name="aboutsms"></a>
+<h2>About VMware vCenter Storage Monitoring Service</h2>
+<p>
+The VMware vCenter Storage Monitoring Service (SMS) provides simplified access to all vCenter storage information
+associated with VMware vCenter servers. It is an Axis 2.0-compliant Web service that runs in the Apache Tomcat
+container, available on the vCenter  host. 
+</p>
+
+<p>
+SMS is installed by default on vCenter Server systems. SMS has its own in-memory database (the SMS cache)
+that periodically synchronizes its data with the vCenter database. You can use the
+SmsServiceInstance.ConfigureSyncInterval method to set the cache synchronization interval.
+</p>
+
+
+<p>Storage administrators can access the Storage Monitoring Service by using the vSphere Client.
+A client-side plug-in for the Storage Monitoring Service installs during vSphere Client installation. 
+With the plug-in, the vSphere Client can display storage configuration and associations with datacenters, 
+graphically. See the Basic Administration Guide, &#147;Using the vSphere Client&#148; 
+and &#147;Setting Up and Monitoring Performance Statistics and Resource Maps&#148; for more information.</p>
+
+	 
+<a name="aboutsmsapi"></a>
+<h2>About the vCenter Storage Monitoring Service API</h2>
+<p>
+As with other vCenter servers (ESX, ESXi, vCenter), the vCenter Storage Monitoring Service (SMS) exposes
+a Web-services-based API, the <strong>SMS API</strong>. The vCenter SMS API provides programmatic access
+to the Storage Monitoring Service.
+</p>
+<p>
+To obtain information about storage across the entire datacenter, it is easier to use the SMS API
+than the vSphere API. Developers who are familiar with the vSphere API should note that for the SMS API,
+<strong>entity types</strong> include:</p>
+<ul>
+<li>cluster</li>
+<li>datacenter</li>
+<li>datastore</li>
+<li>storagePod</li>
+<li>host</li>
+<li>nasMount</li>
+<li>resourcePool</li>
+<li>scsiAdapter</li>
+<li>scsiPath</li>
+<li>scsiTarget</li>
+<li>scsiVolume</li>
+<li>vm</li>
+<li>vmFile</li>
+</ul>
+
+
+<p>Operations provided by the SMS API include:</p>
+
+<ul>
+<li><strong>QueryList</strong>&nbsp;&nbsp; Obtain all properties associated with instances of the specified entity type. </li>
+<li><strong>QueryTopology</strong>&nbsp;&nbsp; Obtain a list of nodes and edges that comprise the specified entity. </li>
+<li><strong>Sync</strong>&nbsp;&nbsp;Synchronize the SMS cache with the vCenter database. Synchronization occurs every 30 minutes, by default, but you can use this operation to force synchronization. Typically, you may want to synchronize only after certain operations, such as a provisioning operation. 
+</li>
+</ul>
+<p>See the <a href="docs/ReferenceGuide/index.html" target="_blank">SMS API Reference documentation</a> for complete information.
+</p>
+
+<h2><a name="contents"></a>Package Contents</h2>
+<p>The VMware vCenter Storage Monitoring Service API is a component of the VMware vSphere Web Services SDK. It includes API Reference documentation, sample code, and client-side proxy code that you can use to develop your client applications. 
+</p>
+<h3 class="Caption">Directory structure</h3>
+
+<table cellpadding="5" cellspacing="0" border="1" width="90%" class="TableText">
+<tr class="TableHead"><td vAlign="top">Directory&nbsp;or&nbsp;filename</td><td vAlign="top">Description</td></tr>
+<tr><td vAlign="top">C:\Program Files\VMware\Infrastructure\VirtualCenter Server\tomcat\webapp\sms</td><td vAlign="top">Path to the Tomcat servlet that implements the Storage Monitoring Service API.</td></tr>
+<tr><td vAlign="top"><a href="docs/ReferenceGuide/index.html">%SDKHOME%\docs\ReferenceGuide</a></td><td vAlign="top">API reference documentation for the vCenter Storage Monitoring Service API.</td></tr>
+<tr><td vAlign="top">%SDKHOME%\sms</td><td vAlign="top">Path containing WSDL, build scripts (build.bat, build.sh), run scripts (run.bat, run.sh), and other development setup tools. </td></tr>
+<tr><td vAlign="top">%SDKHOME%\java\JAXWS\samples\com\vmware\samples\sms</td><td vAlign="top"><a href="#samples">Samples</a> demonstrating how to use the SMS API.</td></tr>
+<tr><td vAlign="top">%SDKHOME%\docs\java\JAXWS</td><td vAlign="top">Javadoc documentation for the sample applications.</td></tr>
+
+</table>
+
+
+<h2><a name="requirements"></a>Requirements</h2>
+<p>To use the vCenter Storage Monitoring Service API, you must have access to vCenter Server (5.0 or subsequent release) and the vSphere Web Services SDK. The vCenter Storage Monitoring Service runs in conjunction with vCenter Server. It is installed during the process of installing the vCenter Server. By default, the SMS package is installed in this sub-directory:
+</p>
+
+<p class="Code">C:\Program Files\VMware\Infrastructure\VirtualCenter Server\tomcat\webapp\sms</p>
+
+
+<p>The SMS API is supported on the Web service that runs at this path:</p>
+
+<p class="Code">/sms/sdk</p>
+
+<a name="samples"></a><h2>Samples Listing</h2>
+<p>The vCenter SMS API includes several Java samples, available in the SDK package:</p>
+
+<table width="625"  border="1" cellpadding="10" cellspacing="0">
+<tr class="light-blue-shade">
+<td vAlign="top">
+<strong>Sample</strong></td>
+<td><strong>Description</strong></td>
+
+</tr>
+
+<tr><td vAlign="top">
+ConfigureSyncInterval.java</td><td vAlign="top">Set the number of seconds between synchronizing the Storage Monitoring Service database with the vCenter  (or other source) database. </td>
+</tr>
+<tr><td vAlign="top">QueryDatastoresInDcWithFilter.java</td><td vAlign="top">Obtain a list of datacenter objects from the inventory and then list datastores associated with each datacenter, sorting and filtering the results according to the specifications passed as command-line arguments. </td></tr>
+
+<tr><td vAlign="top">
+QueryScsiVolumesInDc.java</td><td vAlign="top">Obtain a list of datacenter objects from the inventory and then list LUNs (SCSIvolume objects) associated with each datacenter.</td>
+</tr>
+<tr><td vAlign="top">QueryTopology.java</td><td vAlign="top">Display all nodes (and the edges contained in each) for the specified datacenter.</td></tr>
+
+
+<tr><td vAlign="top">
+Sync.java.java</td><td vAlign="top">Synchronize the Storage Monitoring Service database cache with a source (provider), such as vCenter  database.</td>
+</tr>
+<tr><td vAlign="top">UpdateVcDbConnectionInfo.java</td><td vAlign="top">Configures JDBC connection information (jdbcUsername, jdbcPassword, jdbcUrl) for the connection from the SMS database to the vCenter database.</td></tr>
+<tr><td vAlign="top">SampleProvider.java</td><td vAlign="top">Demonstrates registration, listing and deregistration of a VASA provider. It requires access to an active VASA provider.</td></tr>
+
+</table>
+
+
+<a name="pubs"></a><h2>Documentation</h2>
+<p>Documentation for this release of the SMS API includes:</p>
+<ul>
+<li><a href="SMS-SDK-README.html">SMS-SDK-README.html</a> (this document)</li>
+<li><a href="docs/ReferenceGuide/index.html" target="_blank">vCenter SMS API Reference documentation</a> </li>
+<li><a href="docs/java/JAXWS/samples/javadoc/index.html">Sample Applications Javadoc Reference</a></li>
+</ul>
+
+<a name="checklist"></a>
+<h2>Checklist of Setup Tasks</h2>
+<p>To get started using the SMS SDK:</p>
+<ul><li>Install a Java development environment.</li>
+<li>Configure the environment as defined in the vSphere Web Services SDK <a href="http://www.vmware.com/support/developer/vc-sdk/index.html">Developer&#146;s Setup Guide</a>. In addition to the environment variables defined in that guide, you must also set a <span class="Code">VIMSDKHOME</span> environment variable that identifies the location of the SDK installed on your development machine.</li>
+<li>Use the <span class="Code">build</span> script (build.bat, build.sh) to generate the client-side proxy code and compile all the samples.</li>
+<li>See the <a href="docs/java/JAXWS/samples/javadoc/index.html">samples Javadoc</a> for information about how to run any of the samples. </li>
+</ul>
+
+  
+
+	 <a name="resources"></a><h2>VMware Resources</h2>
+	    <ul>
+		<li><a href="http://www.vmware.com/communities/content/developer/">Developer Center</a></li>
+		<li><a href="http://kb.vmware.com/">Knowledge Base</a></li>
+        <li><a href="http://www.vmware.com/communities/content/vmug/index.html">User Groups</a> </li>
+        <li><a href="http://communities.vmware.com">VMware Communities</a> </li>
+
+
+	 </ul>
+
+
+<hr />
+<table border="0" width="100%">
+<tr>
+<td>
+<p class="Miniscule">Copyright &copy; 2009-2011 VMware, Inc.  All rights not expressly granted herein 
+are reserved. </p>
+</td>
+<td align="right">
+ <p class="Miniscule">Last updated 19Apr2011 &nbsp;|&nbsp; VMware vSphere Web Services SDK 5.0 | <strong>VMware vCenter SMS API 2.0</strong></p>
+</td>
+</tr>
+</table>
+
+</td></tr></table>
+
+</body></html>

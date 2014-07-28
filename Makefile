@@ -1,17 +1,20 @@
 PYTHON?=python
 
-all: build
+all: build managed data enums
 
 build:
 	$(PYTHON) ./bootstrap.py -d
 	./bin/buildout
-    mkdir -p output output/mo output/do output/enums output/base
+    mkdir -p output output/mo output/do output/enums output/faults output/base docs docs/mo docs/do docs/enums docs/faults
 
 managed:
 	$(PYTHON) ./bin/scrapy crawl mo_spider
 
 data:
 	$(PYTHON) ./bin/scrapy crawl do_spider
+
+fault:
+	$(PYTHON) ./bin/scrapy crawl fault_spider
 
 enums:
 	$(PYTHON) ./bin/scrapy crawl enum_spider

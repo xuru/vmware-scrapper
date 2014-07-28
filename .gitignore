@@ -8,3 +8,6 @@
 /.installed.cfg
 /downloads
 /.scrapy
+.DS_Store
+docs
+output

@@ -10,8 +10,8 @@ log = logging.getLogger(__name__)
 
 def {{ classname }}(vim, *args, **kwargs):
     '''{{ description|wordwrap|indent(4) }}'''
-    
-    obj = vim.client.factory.create('ns0:{{ classname }}')
+
+    obj = vim.client.factory.create('{{ '{' + namespace + '}' }}{{ classname }}')
 
     # do some validation checking...
     if (len(args) + len(kwargs)) < {{ required_len }}:
@@ -30,4 +30,4 @@ def {{ classname }}(vim, *args, **kwargs):
             raise InvalidArgumentError("Invalid argument: %s.  Expected one of %s" % (name, ", ".join(required + optional)))
 
     return obj
-    
+

@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<title>VMware vSphere API Reference Documentation</title>
+        <script language="JavaScript" src="./commonRes.js" type="text/javascript"></script>
+	<link rel="stylesheet" type="text/css" href="doc-style.css"></link>
+	<style type="text/css">
+	.Exp {
+	font-size:11px; text-transform: uppercase; FONT-WEIGHT: bold; COLOR: #00000;
+    }
+.light-blue-shade {
+	background-color: #E6EDF6;
+}
+
+	
+	</style>
+	
+</head>
+<body>
+<h1>vSphere ESX Agent Manager API Reference Documentation</h1>
+<p>
+Welcome to the vSphere ESX Agent Manager API Reference documentation. This API reference provides comprehensive information about all data structures available through the vSphere ESX Agent Manager API:</p>
+<ul>
+<li><a href="mo-types-landing.html">Managed object types</a></li>
+<li><a href="do-types-landing.html">Data object types</a></li>
+<li><a href="properties-landing.html">Properties</a></li>
+<li><a href="enums-landing.html">Enumerations</a></li>
+<li><a href="fault-types-landing.html">Faults</a></li>
+</ul>
+<p>The vSphere ESX Agent Manager API is exposed as a Web service, running on vSphere server systems. The API provides access to the vSphere management components&#151;the managed objects that can be used to manage, monitor, and control life-cycle operations of agencies and agents.  
+</p>
+
+<h2>Navigating the API Reference</h2>
+<p>
+The vSphere API Reference is an HTML frameset. Click an entry in the left-hand pane to display information in the right-hand pane. 
+</p>
+
+<h1>Overall Architecture of vSphere ESX Agent Manager</h1>
+
+<p>The vSphere ESX Agent Manager is installed as part of the vSphere platform. Solutions building on top of vSphere can assume vSphere ESX Agent Manager is always present. vSphere ESX Agent Manager exposes a SOAP-based API similar to the VIM API, that solutions use to register and monitor agents.</p>
+
+<p>vSphere ESX Agent Manager is an intermediary between vCenter and a solution with two key aspects: provisioning agent virtual machines and VIB modules for the solution onto a scope in vCenter; and monitoring changes to the agent virtual machines and scope in vCenter, and reporting them back to the solution.</p>
+
+<h2>Provisioning</h2>
+<p>A solution can create an agency in vSphere ESX Agent Manager, change its goal state, update its configuration (for example, update the scope or OVFs and VIBs), query runtime information on the agency as well as on its agents. Finally, the solution can decide to destroy the agency if it is no longer needed. The solution specifies the agent virtual machine, VIB and scope in the configuration when specifying the agency. For VIBs that require dvFilter integration, vSphere ESX Agent Manager sets up special dvFilter switches on the hosts in the agency scope and integrates with the VMCI access manager (VMCI exists on ESX 5.0 hosts and later). Some vSphere ESX Agent Manager functionality is implemented in vCenter, which means that vCenter is agent virtual machine aware and the features DRS, DPM, Maintenance Mode, HA take into account when a virtual machine is an agent virtual machine. vSphere ESX Agent Manager hooks into vCenter's permission model and makes sure that only users with special vSphere ESX Agent Manager view and vSphere ESX Agent Manager modify privileges will be able to modify entities created by vSphere ESX Agent Manager in vCenter or by the vSphere ESX Agent Manager API.</p>
+
+<img src="overall-architecture.png" alt="Overall architecture" />
+
+<h2>Monitoring</h2>
+<p>vSphere ESX Agent Manager monitors changes to the scope covered by agencies, as well as agent virtual machines and hosts. Some changes are handled by vSphere ESX Agent Manager, while others are reported back to solutions if there is no obvious solution to the issue. For example, if an administrator powers off an agent virtual machine it may be for legitimate reason, so it would be wrong of vSphere ESX Agent Manager to power it back on again the moment it detects the power change. Instead, vSphere ESX Agent Manager raises an issue to the solution to handle this problem. Most issues can be resolved by vSphere ESX Agent Manager if the solution requests it to do so. The solution can also handle any issue without using vSphere ESX Agent Manager and vSphere ESX Agent Manager detects this and automatically resolves the issue. Using the previous example, if the solution itself or if the solution asks an administrator to power on the agent virtual machine, vSphere ESX Agent Manager will detect this and remove the issue. </p>
+ 
+<p>Solutions should not poll vSphere ESX Agent Manager to monitor changes in their agencies, but instead use the <code>EventManager</code> in the vSphere API. A solution needs to create an <code>vim.EventHistoryCollector</code> that listens for events coming from vSphere ESX Agent Manager (events with username <code>com.vmware.vim.eam</code>). Every time an issue, a state change or an event occurs in vSphere ESX Agent Manager it will generate an event to the <code>EventManager</code> on the vCenter server that is then channeled down into the respective <code>EventHistoryCollectors</code>, which are finally propagated to the solution.</p>
+
+<img src="monitoring.png" alt="Monitoring" />
+
+<h2>Object Model</h2>
+
+<p>The vSphere ESX Agent Manager data model is small and basically consists of these nine classes (there are more but these are the basic ones). </p>
+
+<img src="data-model.png" alt="Object Model" />
+
+
+<h2>Health status</h2>
+
+<p>An agency and its agents each maintains a status field which can be either Red, Yellow, or Green. The meaning of each value is described briefly below. In each of the more detailed workflow articles we also describe what status an agency or agent is transitioning between.</p>
+
+<p>An agency's EAM health status is the aggregate status of all the agents' statuses. An agency's EAM status always reflects the lowest status of any of the agents' EAM status. The solution can use the health status to determine if it needs to take action or if vSphere ESX Agent Manager is handling the situation. </p>
+
+<h3>Red status</h3>
+<p>The RED health status is used to indicate that the solution must somehow intervene for vSphere ESX Agent Manager to proceed. An example of this is when an agent virtual machine is powered off manually on a compute resource. In this case vSphere ESX Agent Manager does not try to power the agent back on since it assumes the Admin has a reason for stopping the agent. Rather  vSphere ESX Agent Manager reports the fact back to the solution which then must take action, for example by asking the Admin to power on the agent again.</p>
+
+<h3>Yellow State</h3>
+<p>The YELLOW health status indicates that vSphere ESX Agent Manager is actively working on reaching a given goal state. The goal state can be one of Enabled, Disabled, and Uninstalled (see How To Register, Deploy, and Destroy a Solution for details). For example, when a solution is first registered, its status is YELLOW if the state is Disabled or Uinstalled until vSphere ESX Agent Manager has deployed the solution's agents to all the specified compute resources. If the state is Uninstalled the status is GREEN. A solution does not need to intervene when vSphere ESX Agent Manager reports its EAM health status as YELLOW.</p>
+
+<h3>Green State</h3>
+<p>The GREEN health status is used to indicate that a solution and all its agents have reached the desired goal state.</p>
+
+<h3>Status State Machine</h3>
+ 
+<img src="status-change-workflow.png" alt="Status State Machine" />
+
+<h1>For More Information</h1>
+<p>For conceptual and &#147;how to&#148; information, see one of these vSphere Web Services SDK technical publications:
+</p>
+
+<ul>
+    <li><b>Developer&#146;s Setup Guide.</b> Provides information about setting up Java and C# development environments for the vSphere Web Services SDK.<br/><br/></li>
+
+    <li><b>Programming Guide.</b> Overview of the VMware vSphere object model, how to create client applications, using the various managed objects.<br/><br/> </li>
+
+    <li><b>Porting Guide.</b> How to port your VMware Infrastructure SDK 1.x
+        applications to the VMware Infrastructure Web Service 2.0. This guide contains a
+        listing of all the legacy SDK 1.x operations and their 2.0 equivalents. <br/><br/></li>
+</ul>
+
+<p>The most recent published versions of these guides are available at:
+</p>
+<p><a href="http://www.vmware.com/support/developer">http://www.vmware.com/support/developer/vc-sdk</a>
+</p>
+
+<p><script language="javascript">document.write(ID_Copyright);</script><br/>
+<script language="javascript">document.write(ID_VersionInformation);</script>
+</p>
+</body>
+</html>

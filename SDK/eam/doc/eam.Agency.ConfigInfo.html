@@ -1,0 +1,151 @@
+<html xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:vim2="urn:vim2" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+<script src="./commonRes.js" language="JavaScript"> type="text/javascript"></script>
+<link href="doc-style.css" type="text/css" rel="StyleSheet">
+</head>
+<script src="dynamic-content.js" type="text/javascript"></script>
+<body>
+<table cellspacing="0" class="header-footer" id="top">
+<tr>
+<td>
+<br>
+</td><td></td><td><a href="#field_detail">Local Properties</a></td><td></td>
+</tr>
+<tr>
+<td><a href="index-mo_types.html">Managed Object Types</a></td><td><a href="index-do_types.html">Data Object Types</a></td><td><a href="index-properties.html">All Properties</a></td><td><a href="index-methods.html">All Methods</a></td>
+</tr>
+</table>
+<br>
+<a id="eam.Agency.ConfigInfo" name="eam.Agency.ConfigInfo"></a>
+<h1>Data Object - AgencyConfigInfo</h1>
+<dl>
+<dt>Property of</dt>
+<dd>
+<a href="eam.Agency.html#field_detail">Agency</a>
+</dd>
+<dt>Parameter to</dt>
+<dd>
+<a href="eam.EsxAgentManager.html#createAgency">CreateAgency</a>, <a href="eam.Agency.html#update">Update</a>
+</dd>
+<dt>Returned by</dt>
+<dd>
+<a href="eam.Agency.html#queryConfig">QueryConfig</a>
+</dd>
+<dt>Extends</dt>
+<dd>
+vmodl.DynamicData
+</dd>
+<dt>See also</dt>
+<dd>
+<a href="eam.Agency.Scope.html">AgencyScope</a>, <a href="eam.Agent.ConfigInfo.html">AgentConfigInfo</a>
+</dd>
+<p></p>
+</dl>
+<H2>Data Object 
+                  Description</H2>
+<p></p>
+         This is the configuration of an <code>Agency</code>. It determines on which compute
+ resources to deploy the agents, which VIB to install, which
+ OVF package to install, and how to configure these items by setting the DvFilter
+ and OVF environment properties.
+      <p></p>
+<a id="field_detail" name="field_detail"></a>
+<p class="table-title">Properties</p>
+<table cellspacing="0">
+<tr>
+<th>
+	          Name
+	        </th><th>
+	          Type
+	        </th><th>
+	          Description
+	        </th>
+</tr>
+<tr class="r1">
+<td nowrap="1"><a id="agencyName" name="agencyName"></a><strong>agencyName</strong><span title="Need not be set" class="footnote-ref">*</span></td><td>xsd:string</td><td>
+<p></p>
+         Name of the agency. Must be set when creating the agency.
+      <br>
+</td>
+</tr>
+<tr class="r0">
+<td nowrap="1"><a id="agentConfig" name="agentConfig"></a><strong>agentConfig</strong><span title="Need not be set" class="footnote-ref">*</span></td><td><a href="eam.Agent.ConfigInfo.html">AgentConfigInfo[]</a></td><td>
+<p></p>
+         A list of <a href="eam.Agent.ConfigInfo.html">AgentConfigInfo</a>s for hosts covered by this
+ <code>Agency</code>. When provisioning a new agent to a host, vSphere ESX Agent Manager
+ tries to find, from left to right in the array, a match for an
+ <a href="eam.Agent.ConfigInfo.html">AgentConfigInfo</a> and stops searching at the first one that it finds.
+      <br>
+</td>
+</tr>
+<tr class="r1">
+<td nowrap="1"><a id="agentName" name="agentName"></a><strong>agentName</strong><span title="Need not be set" class="footnote-ref">*</span></td><td>xsd:string</td><td>
+<p></p>
+         An optional name to use when naming agent virtual machines. For example, if set to
+ "example-agent", each agent virtual machine will be named "example-agent (1)",
+ "example-agent (2)", and so on. The maximum length of <code>agentName</code> is 70 bytes.
+      <br>
+</td>
+</tr>
+<tr class="r0">
+<td nowrap="1"><a id="manuallyMarkAgentVmAvailableAfterPowerOn" name="manuallyMarkAgentVmAvailableAfterPowerOn"></a><strong>manuallyMarkAgentVmAvailableAfterPowerOn</strong><span title="Need not be set" class="footnote-ref">*</span></td><td>xsd:boolean</td><td>
+<p></p>
+         If set to <code>true</code>, the client of this agency must manually mark the agent as
+ ready after the agent virtual machine has been powered on. In this case, DRS will not regard
+ the agent virtual machine as ready until the client has marked the agent as ready.<br>See Agent#markAsAvailable()
+      <br>
+</td>
+</tr>
+<tr class="r1">
+<td nowrap="1"><a id="manuallyMarkAgentVmAvailableAfterProvisioning" name="manuallyMarkAgentVmAvailableAfterProvisioning"></a><strong>manuallyMarkAgentVmAvailableAfterProvisioning</strong><span title="Need not be set" class="footnote-ref">*</span></td><td>xsd:boolean</td><td>
+<p></p>
+         If set to <code>true</code>, the client of this agency must manually mark the agent as
+ ready after the agent virtual machine has been provisioned. This is useful if the client of
+ this solution performs some extra reconfiguration of the agent virtual machine before it is
+ powered on.<br>See Agent#markAsAvailable()
+      <br>
+</td>
+</tr>
+<tr class="r0">
+<td nowrap="1"><a id="optimizedDeploymentEnabled" name="optimizedDeploymentEnabled"></a><strong>optimizedDeploymentEnabled</strong><span title="Need not be set" class="footnote-ref">*</span></td><td>xsd:boolean</td><td>
+<p></p>
+         If set to <code>true</code>, ESX Agent Manager will use vSphere Linked Clones to speed up the deployment
+ of agent virtual machines. Using linked clones implies that the agent virtual machines cannot use
+ Storage vMotion to move to another vSphere datastore.
+      <br>
+</td>
+</tr>
+<tr class="r1">
+<td nowrap="1"><a id="scope" name="scope"></a><strong>scope</strong><span title="Need not be set" class="footnote-ref">*</span></td><td><a href="eam.Agency.Scope.html">AgencyScope</a></td><td>
+<p></p>
+         The scope of the <code>Agency</code>.
+      <br>
+</td>
+</tr>
+<tr class="r0">
+<td colspan="3">
+						Properties inherited from vmodl.DynamicData</td>
+</tr>
+<tr class="r1">
+<td colspan="3"><a href="vmodl.DynamicData.html#dynamicProperty">dynamicProperty</a>, <a href="vmodl.DynamicData.html#dynamicType">dynamicType</a></td>
+</tr>
+</table>
+<span class="footnote-ref">*</span><span class="footnote">Need not be set</span>
+<br>
+<br>
+<table cellspacing="0" class="header-footer" id="bottom">
+<tr>
+<td><a href="#top">Top of page</a></td><td></td><td><a href="#field_detail">Local Properties</a></td><td></td>
+</tr>
+<tr>
+<td><a href="index-mo_types.html">Managed Object Types</a></td><td><a href="index-do_types.html">Data Object Types</a></td><td><a href="index-properties.html">All Properties</a></td><td><a href="index-methods.html">All Methods</a></td>
+</tr>
+</table>
+<br>
+<script language="javascript">document.write(ID_Copyright);</script>
+<br>
+<script language="javascript">document.write(ID_VersionInformation);</script>
+</body>
+</html>
