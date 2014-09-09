@@ -5,7 +5,7 @@ all: build managed data enums fault
 build:
 	$(PYTHON) ./bootstrap.py
 	./bin/buildout
-	mkdir -p output output/mo output/do output/enums output/faults output/base docs docs/mo docs/do docs/enums docs/faults
+	mkdir -p output output/mo output/do output/enums output/base docs docs/mo docs/do docs/enums
 
 managed:
 	$(PYTHON) ./bin/scrapy crawl mo_spider
