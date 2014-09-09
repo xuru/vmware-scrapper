@@ -6,17 +6,13 @@ from scrapy.http import Request
 import os.path
 import urllib
 from visdk41.items import EnumObject
-
-SDK = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, os.path.pardir, 'SDK'))
-SMS = os.path.join(SDK, "sms-sdk", "docs", "ReferenceGuide")
-VIM = os.path.join(SDK, "vsphere-ws", "docs", "ReferenceGuide")
-
+from .urls import SMS, VIM
 
 class Enumpider(BaseSpider):
     name = 'enum_spider'
     start_urls = [
-                  "file://" + urllib.pathname2url(os.path.join(SMS, "index-e_types.html")),
-                  "file://" + urllib.pathname2url(os.path.join(VIM, "index-e_types.html"))
+                  SMS + "index-e_types.html",
+                  VIM + "index-e_types.html"
                  ]
 
     def __init__(self):
