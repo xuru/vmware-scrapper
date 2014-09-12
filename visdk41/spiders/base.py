@@ -8,10 +8,6 @@ class Base(BaseSpider):
 
     def __init__(self):
         super(Base, self).__init__()
-        self.verificationErrors = []
-
-    def __del__(self):
-        print self.verificationErrors
 
     def parse(self, response):
         hxs = HtmlXPathSelector(response)
@@ -22,5 +18,8 @@ class Base(BaseSpider):
             yield Request(url, callback=self.parse_page)
 
     def parse_page(self, response):
+        if "GUID-" in response.url or "right-pane" in response.url:
+            self.log('skipping: %s' % response.url)
+            return
         self.log('parse_page: %s' % response.url)
         yield self.object_class().parse(response)

@@ -132,7 +132,7 @@ class GenConsts(object):
         enums_dir = os.path.join(self.output_dir, config.get('enum', 'code_dir'))
 
         for item in self.enum_items.values():
-            print "Processing: %s" % item['name']+".py"
+            log.msg("Processing %s..." % item['name'], level=log.WARNING)
             with open(os.path.join(enums_dir, camel_to_under(item['name'])+".py"), 'w') as fp:
                 content = ""
                 for const in item['constants']:

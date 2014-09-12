@@ -190,8 +190,6 @@ class Methods(IteratorObject):
                 index = 0
                 nodes = s.select('following::*')
                 for node in nodes:
-                    print node
-                    print type(node)
                     try:
                         ntype = _clean(node.select('name()')[0])
                     except:
@@ -290,18 +288,11 @@ class Klass(object):
         self.referer = None
 
     def parse(self, response):
-        # print "="*80
-        # print response
-        # print "="*80
         self.hxs = HtmlXPathSelector(response)
         self.referer = response.request.headers['Referer']
 
         text = _clean(self.hxs.select('/html/body/h1[1]/text()')).strip()
-        # print "*" *80
-        # print text
-        # print "*" *80
         name_obj = re.search(r""".*\b.*?(?P<name>\w+)$""", text)
-        print "name_obj: %s" % name_obj
         self.name = name_obj.group('name')
 
         self.description = self._findDescription(self.hxs)
