@@ -1,39 +1,10 @@
-
-from scrapy.spider import BaseSpider
-from scrapy.selector import HtmlXPathSelector
-from scrapy.http import Request
-
-import os.path
-import urllib
 from visdk41.items import ManagedObject
+from .base import Base
 
-SDK = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, os.path.pardir, 'SDK'))
-SMS = os.path.join(SDK, "sms-sdk", "docs", "ReferenceGuide")
-VIM = os.path.join(SDK, "vsphere-ws", "docs", "ReferenceGuide")
-
-
-class MOSpider(BaseSpider):
+class MOSpider(Base):
     name = 'mo_spider'
     start_urls = [
-                  "file://" + urllib.pathname2url(os.path.join(SMS, "index-mo_types.html")),
-                  "file://" + urllib.pathname2url(os.path.join(VIM, "index-mo_types.html"))
+                  Base.SMS + "index-mo_types.html",
+                  Base.VIM + "index-mo_types.html"
                  ]
-
-    def __init__(self):
-        BaseSpider.__init__(self)
-        self.verificationErrors = []
-
-    def __del__(self):
-        print self.verificationErrors
-
-    def parse(self, response):
-        hxs = HtmlXPathSelector(response)
-        urls = hxs.select("//div[@class]//a[@href]")
-        for url in urls:
-            basename = url.select('./@href').extract()[0]
-            url = '/'.join([response.url.rsplit('/', 1)[0], basename])
-            yield Request(url, callback=self.parse_page)
-
-    def parse_page(self, response):
-        self.log('parse_page: %s' % response.url)
-        yield ManagedObject().parse(response)
+    object_class = ManagedObject

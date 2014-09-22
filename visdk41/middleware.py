@@ -22,7 +22,7 @@ class LintMiddleware(object):
     table_re = re.compile(r"""<table>(?P<outer>.*?<table.*?>.*?</table>.*?)</table>""",  re.MULTILINE| re.DOTALL)
     inner_table_re = re.compile(r"""(?P<inner><table>.*?</table>)""",  re.MULTILINE| re.DOTALL)
 
-    empty_anchor_re = re.compile(r"""<a.*?></.*?a>""")
+    empty_anchor_re = re.compile(r"""<a[^>]*?></[^>]*?a>""")
     ul_re = re.compile(r"""<ul>""")
     ul_end_re = re.compile(r"""<[/]ul>""")
     li_re = re.compile(r"""<li>""")

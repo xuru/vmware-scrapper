@@ -56,9 +56,6 @@ class VisdkPipeline(object):
         if _base == self.mo_base:
             _type = 'base'
 
-        if item['name'] == 'PropertyFilter':
-            pass
-
         with open(codename, 'w') as fp:
             template = env.get_template('mo.template')
             klass = template.render(
@@ -88,9 +85,6 @@ class VisdkPipeline(object):
         _base = item['info'].get('Extends', self.mo_base)
         if _base == self.mo_base:
             _type = 'base'
-
-        if "VirtualEthernetCard" in item['name']:
-            pass
 
         with open(codename, 'w') as fp:
 
